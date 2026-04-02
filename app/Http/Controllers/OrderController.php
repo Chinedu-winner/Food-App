@@ -25,7 +25,10 @@ class OrderController extends Controller{
             'updated_at' => $order->updated_at,
         ]);
     }
-
+    public function index(){
+        $orders = Order::with('items.food')->latest()->get();
+        return view('admin.orders.index', compact('orders'));
+    }
     public function store(Request $request){
         $request->validate([
             'cart' => 'required|array|min:1',
@@ -33,19 +36,18 @@ class OrderController extends Controller{
 
         $cartItems = $request->input('cart'); 
 
-        // Calculate total
         $totalPrice = collect($cartItems)->sum(function($item){
             return $item['price'] * $item['quantity'];
         });
-
-        // Create order
+    
         $order = Order::create([
             'user_id' => Auth::id(),
-            'total'   => $totalPrice,
-            'status'  => Order::STATUS_PENDING,
-        ]);
+            'total_price' => $totalPrice,
+            'address' => Auth::user()->address,
+            'status' => 'pending',
+    ]);
 
-        // Create order items
+
         foreach ($cartItems as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -55,8 +57,52 @@ class OrderController extends Controller{
             ]);
         }
 
-        // Redirect to track page
         return redirect()->route('orders.track', $order->id)
-                         ->with('success', 'Order placed successfully!');
+            ->with('success', 'Order placed successfully!');
     }
+
+    public function searchFood(Request $request){
+        $query = $request->input('query');
+            if (!$query) return redirect()->route('orders.create');
+    
+        $response = OpenAI::embeddings()->create([
+            'model' => 'text-embedding-3-small',
+            'input' => $query,
+        ]);
+        $queryVector = $response['data'][0]['embedding'];
+
+        $foods = Food::all()->map(function ($food) use ($queryVector) {
+            $foodVector = $food->embedding;
+            $food->similarity = $this->cosineSimilarity($queryVector, $foodVector);
+            return $food;
+        })->sortByDesc('similarity'); // highest match first
+
+    return view('orders.create', compact('foods', 'query'));
+    }
+
+    private function cosineSimilarity(array $vecA, array $vecB): float{
+        $dot = 0;
+        $normA = 0;
+        $normB = 0;
+
+        foreach ($vecA as $i => $a) {
+            $b = $vecB[$i] ?? 0;
+            $dot += $a * $b;
+            $normA += $a * $a;
+            $normB += $b * $b;
+        }
+
+        return $dot / (sqrt($normA) * sqrt($normB) + 1e-8);
+    }
+
+    public function addItem(Food $food)
+{
+    $order = auth()->user()->currentOrder(); // your logic to get current order
+    $order->items()->create([
+        'food_id' => $food->id,
+        'quantity' => 1,
+    ]);
+
+    return back()->with('success', 'Food added to order!');
 }
+    }

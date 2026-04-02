@@ -21,6 +21,7 @@ class Food extends Model{
     'category_id',
     'status'
 ];
+
     protected $casts = [
         'available' => 'boolean',
         'price' => 'decimal:2',
@@ -116,8 +117,7 @@ class Food extends Model{
         return $badges;
     }
 
-    public function recalcRating(): void
-    {
+    public function recalcRating(): void{
         $avg = $this->orderItems()->whereHas('order', fn(Builder $q) => $q->where('status', 'delivered'))->avg('rating') ?? 0;
         $this->rating = round($avg, 2);
         $this->saveQuietly();

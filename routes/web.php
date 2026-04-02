@@ -35,18 +35,15 @@ Route::post('/order', function (Request $request) {
         'price' => 'required|numeric|min:0',
     ]); 
 
-    $order = Order::create([
-        'user_id' => Auth::id(),
-        'name' => $data['name'],
-        'food_name' => $data['food_name'],
-        'quantity' => $data['quantity'],
-        'price' => $data['price'],
-        'total' => $data['price'] * $data['quantity'],
-        'address' => Auth::user()->address,
-        'status' => 'pending',
-    ]);
+    $order = new Order();
+    $order->user_id = Auth::id();
+    $order->total_price = $data['price'] * $data['quantity'];
+    $order->total = $data['price'] * $data['quantity'];
+    $order->address = Auth::user()->address ?? 'No address provided';
+    $order->status = 'pending';
+    $order->save();
 
-    return redirect('/dashboard')->with('success', 'Order placed successfully!');
+    return redirect()->route('track', ['order' => $order->id])->with('success', 'Order placed successfully!');
 })->middleware('auth');
 
 Route::get('/track', function () {
@@ -63,12 +60,18 @@ Route::post('/track', function (Request $request) {
     if (!$order) {
         return back()->withErrors(['order_id' => 'Order not found or does not belong to you.']);
     }
-    return redirect()->route('orders.track', ['order' => $order->id]);
+    return redirect()->route('admin.orders.track', ['order' => $order->id]);
 })->middleware('auth');
 
+Route::get('/analytics/data', [AnalyticsController::class, 'data']);
+
 Route::get('orders/{order}/status', function($order) { 
-    return "Status of order: " . $order;
+    return "Status of order:" . $order;
 })->name('orders.status');
+
+Route::get('/dashboard/analytics', 
+    [App\Http\Controllers\AnalyticsController::class, 'index'
+])->name('analytics');
 
 Route::get('/login', function () {
     return view('login'); 
@@ -92,6 +95,10 @@ Route::post('/login', function (Request $request) {
 Route::get('/register', function () {
     return view('register'); 
 })->name('register');
+
+Route::get('/dashboard/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::get('/dashboard/orders/search-food', [OrderController::class, 'searchFood'])->name('orders.searchFood');
+Route::post('/dashboard/orders/add-item/{food}', [OrderController::class, 'addItem'])->name('orders.addItem');
 
 Route::post('/register', function(Request $request) {
     $data = $request->validate([
@@ -156,7 +163,11 @@ Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('
 
     Route::resource('food', FoodController::class);
 
-    Route::get('/orders', fn() => "Orders page")->name('orders');
+    Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/track', [App\Http\Controllers\Admin\OrderController::class, 'track'])->name('orders.track');
+    Route::delete('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
+
     Route::get('/foods', fn() => "Foods page")->name('foods');
     Route::get('/categories', fn() => "Categories page")->name('categories');
     Route::get('/users', fn() => "Users page")->name('users');
@@ -182,4 +193,19 @@ Route::prefix('foods')->name('foods.')->group(function () {
         Route::delete('/{food}', [FoodController::class, 'destroy'])->name('destroy');
     });
 
+Route::delete('/admin/food/{food}', [App\Http\Controllers\Admin\FoodController::class, 'destroy'])
+    ->name('admin.food.destroy')
+->middleware(['auth', 'admin']);
+
 Route::get('/foods', [FoodController::class, 'index'])->name('food.index');
+
+Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('order.place');
+Route::get('/order/success/{id}', [OrderController::class, 'success'])->name('order.success');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(function () {
+    Route::resource('categories', CategoryController::class);
+}); 

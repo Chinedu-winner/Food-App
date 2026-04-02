@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Activity extends Model
-{
-    //
+class Activity extends Model{
+    protected $fillable = [
+        'action',
+        'food_name',
+    ];
 }

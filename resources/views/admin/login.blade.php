@@ -33,7 +33,7 @@
     <label class="block text-gray-700 font-semibold mb-1">Password</label>
 
     <div class="relative">
-        <input type="password" id="password"name="password" requiredclass="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400">
+        <input type="password" id="password" name="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400">
         <button type="button" onclick="togglePassword()" class="absolute right-3 top-2 text-gray-600" id="toggleBtn">👁</button>
     </div>
     </div>

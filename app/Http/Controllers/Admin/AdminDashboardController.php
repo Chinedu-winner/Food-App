@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\Models\Food;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\AdminAccessLog; 
+use App\Models\Category;
 
 class AdminDashboardController extends Controller{
     public function __construct(){
@@ -14,6 +16,10 @@ class AdminDashboardController extends Controller{
         $user = auth()->user();
             $twelveMonthsAgo = Carbon::now()->subMonths(12);
     
+                $latestFoods = Food::latest()->take(5)->get(); 
+
+                $totalFoods = Food::count(); 
+
         $recentLogins = AdminAccessLog::with('admin')
                             ->where('created_at', '>=', $twelveMonthsAgo)
                             ->latest()
@@ -26,7 +32,7 @@ class AdminDashboardController extends Controller{
 
     $users = User::latest()->take(10)->get(); // only 10 users for preview
             
-        return view('admin.dashboard', compact('user', 'recentLogins', 'users', 'loginsByMonth'));
+        return view('admin.dashboard', compact('user', 'recentLogins', 'users',  'totalFoods', 'latestFoods', 'loginsByMonth'));
     }
 
 

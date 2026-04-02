@@ -90,4 +90,9 @@ class FoodController extends Controller{
         return redirect()->route('admin.foods.index')
             ->with('success', 'Food deleted successfully.');
     }
+    public function showMeal(){
+    $foods = Food::all(); // or paginate()
+    $categories = Category::all();
+    return view('Meal', compact('foods', 'categories'));
+}
 }

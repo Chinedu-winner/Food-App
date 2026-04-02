@@ -15,23 +15,31 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('latitude', 10, 7)->nullable()->after('phone');
-            $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
-        });
-    }
+  public function up()
+{
+    Schema::table('orders', function (Blueprint $table) {
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn(['latitude', 'longitude']);
-        });
-    }
+        if (!Schema::hasColumn('orders', 'latitude')) {
+            $table->decimal('latitude', 10, 7)->nullable();
+        }
+
+        if (!Schema::hasColumn('orders', 'longitude')) {
+            $table->decimal('longitude', 10, 7)->nullable();
+        }
+
+    });
+}
+
+public function down(){
+    Schema::table('orders', function (Blueprint $table) {
+        if (Schema::hasColumn('orders', 'latitude')) {
+            $table->dropColumn('latitude');
+        }
+
+        if (Schema::hasColumn('orders', 'longitude')) {
+            $table->dropColumn('longitude');
+        }
+
+    });
+}
 };

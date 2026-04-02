@@ -5,19 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
-    public function up() {
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('admin_id')->nullable();
-    });
-}
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
+    public function up(){
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->bigInteger('admin_id')->nullable()->after('id');
+        });
+    }
+
+    public function down(){
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('admin_id');
         });
     }
 };

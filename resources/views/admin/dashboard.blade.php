@@ -64,8 +64,8 @@
     @endif
 </tbody>
     </table>
-    <h2>Recent Users</h2>
 
+    <h2>Recent Users</h2>
     <table class="w-full mt-6 text-left border">
         <thead>
             <tr class="bg-gray-200">
@@ -85,7 +85,6 @@
         @endforeach
     </table>
 
-    <!-- control the food part  -->
     <div class="bg-white p-6 rounded-xl shadow">
     <h2 class="text-gray-500">Total Foods</h2>
     <p class="text-3xl font-bold">{{ $totalFoods }}</p> 
@@ -145,7 +144,7 @@
 <script>
     let idleTime = 0;
 
-    let idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+    let idleInterval = setInterval(timerIncrement, 60000); 
 
     document.onmousemove = document.onkeypress = function() {
         idleTime = 0;
@@ -153,7 +152,7 @@
 
     function timerIncrement() {
         idleTime++;
-        if (idleTime > 5) { // 5 minutes
+        if (idleTime > 5) {
             alert("You have been logged out due to inactivity.");
             window.location.href = "{{ route('admin.login') }}";
         }

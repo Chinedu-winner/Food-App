@@ -23,8 +23,8 @@
       <li class="px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 hover:text-white flex items-center gap-2 cursor-pointer transition-all duration-200">
         <a href="{{ route('track') }}" class="flex items-center gap-2 text-white hover:text-white"><span>✉️</span> Track</a>
       </li>
-    <li class="px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 hover:text-white flex items-center gap-2 cursor-pointer transition-all duration-200">
-      <span>📊</span> Analytics
+    <li class="px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 hover:text-white flex items-center gap-2 cursor-pointer transition-all duration-200"><a href="{{route('analytics')}}"><span>📊
+      <span>📊</span> Analytics</a>
     </li>
     <li class="px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 hover:text-white flex items-center gap-2 cursor-pointer transition-all duration-200">
       <span>⚙️</span> Settings

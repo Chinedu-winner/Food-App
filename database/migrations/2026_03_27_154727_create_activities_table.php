@@ -6,16 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
     public function up(): void{
-    Schema::create('activities', function (Blueprint $table) {
-    $table->id();
-    $table->string('action'); // added, updated, deleted
-    $table->string('food_name');
-    $table->timestamps();
-    });
-}
+        if (!Schema::hasTable('activities')) {
+            Schema::create('activities', function (Blueprint $table) {
+                $table->id();
+                $table->string('action');
+                $table->string('food_name');
+                $table->timestamps();
+            });
+        }
+    }
 
-    public function down(): void
-    {
+    public function down(): void{
         Schema::dropIfExists('activities');
     }
 };

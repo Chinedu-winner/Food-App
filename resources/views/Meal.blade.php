@@ -71,12 +71,12 @@
         </div>
       </div>
     </section>
-    @endforeach
+        
 
+      
     <section class="mb-20">
       <h2 class="text-4xl md:text-5xl font-semibold text-bistro-heading border-b-4 border-bistro-border pb-4 mb-10 inline-block">Nigerian Native Delicacies</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          @foreach($foods['Nigerian Native Delicacies'] ?? [] as $food)
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
           <img src="https://images.unsplash.com/photo-1596236906666-b3281c85304b?q=80&w=600&auto=format&fit=crop" alt="Jollof Rice" class="w-full h-56 md:h-64 object-cover">
           <div class="p-6">
@@ -93,8 +93,7 @@
             </div>
           </div>
         </div>
-
-        <!-- 2. Pounded Yam & Egusi -->
+ <!-- 2. Pounded Yam & Egusi -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
           <img src="https://images.unsplash.com/photo-1627993427772-27712398516d?q=80&w=600&auto=format&fit=crop" alt="Pounded Yam and Egusi" class="w-full h-56 md:h-64 object-cover">
           <div class="p-6">
@@ -148,6 +147,7 @@
           </div>
         </div>
 
+
         <!-- 5. Suya -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
           <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=600&auto=format&fit=crop" alt="Suya" class="w-full h-56 md:h-64 object-cover">
@@ -165,7 +165,7 @@
             </div>
           </div>
         </div>
-
+  
         <!-- 6. Pepper Soup -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
           <img src="https://images.unsplash.com/photo-1604152135912-04a022e23696?q=80&w=600&auto=format&fit=crop" alt="Pepper Soup" class="w-full h-56 md:h-64 object-cover">
@@ -444,7 +444,6 @@
 
     <footer class="mt-24 pt-10 border-t border-gray-300 text-center text-gray-600 text-sm">Prices are in USD • All ratings based on customer reviews • Menu updated February 2026</footer>
   </div>
-    @endforeach
 
 </body>
 </html>

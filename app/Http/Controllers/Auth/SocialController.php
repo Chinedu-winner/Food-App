@@ -32,9 +32,13 @@ class SocialController extends Controller{
         } catch (\Exception $e) {
             return redirect('/login')->with('error', 'Something went wrong: ' . $e->getMessage());
         }
+        dd(config('services.google'));
     }   
-
     public function redirectToGoogle(){
         return Socialite::driver('google')->redirect();
-    }
-}
+    dd([
+        'env' => env('GOOGLE_CLIENT_ID'),
+        'config' => config('services.google'),
+    ]);
+}}
+
