@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <div class="bg-white p-6 rounded shadow mb-6 max-w-md">
+    <div class="bg-gray-50 p-6 rounded shadow mb-6 max-w-md">
         <form method="POST" action="{{ route('track') }}">
             @csrf
             <label for="order_id" class="block text-gray-700 font-semibold mb-2">Enter Your Order ID:</label>

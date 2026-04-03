@@ -7,7 +7,7 @@
     <h1 class="text-2xl font-bold">All Orders</h1>
 </div>
 
-<table class="min-w-full bg-white border border-gray-200">
+<table class="min-w-full" style="background-color: rgb(233,226,207)" class="border border-gray-200">
     <thead>
         <tr class="bg-gray-100 text-left">
             <th class="py-3 px-4 border-b">ID</th>

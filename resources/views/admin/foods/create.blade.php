@@ -5,7 +5,7 @@
 @section('content')
 <h1 class="text-2xl font-bold mb-4">Add New Food</h1>
 
-<form action="{{ route('food.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.food.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label class="block mb-2">Name</label>
     <input type="text" name="name" class="border p-2 w-full mb-4" required>

@@ -4,100 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Admin Dashboard - FoodWin</title>
+    <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js" type="module"></script>
+    <title>@yield('page-title', 'Admin Dashboard') - FoodWin</title>
+    <style>
+        .sidebar-gradient { background: linear-gradient(135deg, #0f766e 0%, #059669 100%);}.main-bg {background: #f8fafc;}.card-shadow {box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);}
+    </style>
 </head>
 
-<body class="flex h-screen bg-gray-100">
-    <aside class="w-64 bg-gray-900 text-white flex flex-col shadow-lg">
-        <div class="p-6 text-2xl font-extrabold border-b border-gray-700">FoodWin Admin</div>
-        <nav class="flex-1 mt-4">
-            <ul class="space-y-1">
+<body class="flex h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar-gradient text-white flex flex-col shadow-xl">
+        <div class="p-6 border-b border-white/20">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">FoodWin Admin</h1>
+                    <p class="text-sm text-white/70">Management Panel</p>
+                </div>
+            </div>
+        </div>
 
+        <nav class="flex-1 mt-6 px-4">
+            <ul class="space-y-2">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 hover:bg-gray-700 transition">Dashboard</a>
-                </li>
-
-                <li class="relative group">
-                    <span class="block px-6 py-3 font-semibold cursor-pointer hover:bg-gray-700 transition">Orders</span>
-                    <ul class="hidden group-hover:block absolute left-full top-0 bg-gray-800 w-56 shadow-xl rounded-md overflow-hidden">
-                        <li><a href="{{ route('admin.orders') }}" class="block px-4 py-2 hover:bg-gray-700">All Orders</a></li>
-                        <li><a href="{{ route('admin.orders.track', 1) }}" class="block px-4 py-2 hover:bg-gray-700">Order Track</a></li>
-                        <li><a href="{{ route('admin.orders.show', 1) }}" class="block px-4 py-2 hover:bg-gray-700">Orders Show</a></li>
-
-                        @if(isset($foods) && $foods->count())
-                            <li class="border-t border-gray-600 my-1"></li>
-                            @foreach($foods as $food)
-                                <li>
-                                    <a href="{{ route('admin.food.edit', $food->id) }}" class="block px-4 py-2 hover:bg-gray-700 text-sm">{{ $food->name }}</a>
-                                </li>
-                            @endforeach 
-                        @endif
-                    </ul>
-                </li>
-
-            <li class="relative group">
-                <span class="block px-6 py-3 font-semibold cursor-pointer hover:bg-gray-700 transition">Food</span>
-                <ul class="hidden group-hover:block absolute left-full top-0 bg-gray-800 w-56 shadow-xl rounded-md overflow-hidden">
-                    <li><a href="{{ route('admin.food.index') }}" class="block px-4 py-2 hover:bg-gray-700">Food List</a></li>
-                    <li><a href="{{ route('admin.food.create') }}" class="block px-4 py-2 hover:bg-gray-700">Add Food</a></li>
-                    @if(isset($foods) && $foods->count())
-                        <li class="border-t border-gray-600 my-1"></li>
-                        @foreach($foods as $food)
-                            <li>
-                                <a href="{{ route('admin.food.edit', $food->id) }}" class="block px-4 py-2 hover:bg-gray-700 text-sm">{{ $food->name }}</a>
-                            </li>
-                        @endforeach
-                    @endif
-                </ul>
-            </li>
-
-                <li class="relative group">
-                    <span class="block px-6 py-3 font-semibold cursor-pointer hover:bg-gray-700 transition">Categories</span>
-                    <ul class="hidden group-hover:block absolute left-full top-0 bg-gray-800 w-56 shadow-xl rounded-md overflow-hidden">
-                        <li><a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 hover:bg-gray-700">Categories List</a></li>
-                        <li><a href="{{ route('admin.categories.create') }}" class="block px-4 py-2 hover:bg-gray-700">Add Category</a></li>
-
-                        @if(isset($categories) && $categories->count())
-                            <li class="border-t border-gray-600 my-1"></li>
-                            @foreach($categories as $category)
-                                <li>
-                                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="block px-4 py-2 hover:bg-gray-700">Edit {{ $category->name }}</a>
-                                </li>
-                            @endforeach
-                        @endif
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="{{ route('admin.users') }}" class="block px-6 py-3 hover:bg-gray-700 transition">Users</a>
-                </li>
-
-                <li class="mt-4 border-t border-gray-700 pt-2">
-                    <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-6 py-3 hover:bg-red-600 transition text-red-300">
-                        Logout
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 group">
+                        <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
+                        </svg>
+                        Dashboard
                     </a>
-                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
-                        @csrf
-                    </form>
                 </li>
 
+                <li class="relative group">
+                    <span class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer group">
+                        <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Orders
+                        <svg class="w-4 h-4 ml-auto group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </span>
+                    <ul class="hidden group-hover:block absolute left-full top-0 bg-white text-gray-800 w-56 shadow-2xl rounded-lg overflow-hidden border border-gray-200 z-50">
+                        <li><a href="{{ route('admin.orders') }}" class="block px-4 py-3 hover:bg-gray-50 transition">All Orders</a></li>
+                        <li><a href="{{ route('admin.orders.track', 1) }}" class="block px-4 py-3 hover:bg-gray-50 transition">Track Order</a></li>
+                    </ul>
+                </li>
+
+                <li class="relative group">
+                    <span class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer group">
+                        <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                        Food
+                        <svg class="w-4 h-4 ml-auto group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </span>
+                    <ul class="hidden group-hover:block absolute left-full top-0 bg-white text-gray-800 w-56 shadow-2xl rounded-lg overflow-hidden border border-gray-200 z-50">
+                        <li><a href="{{ route('admin.food.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Food List</a></li>
+                        <li><a href="{{ route('admin.food.create') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Add Food</a></li>
+                    </ul>
+                </li>
+
+                <li class="relative group">
+                    <span class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer group">
+                        <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                        Categories
+                        <svg class="w-4 h-4 ml-auto group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </span>
+                    <ul class="hidden group-hover:block absolute left-full top-0 bg-white text-gray-800 w-56 shadow-2xl rounded-lg overflow-hidden border border-gray-200 z-50">
+                        <li><a href="{{ route('admin.categories.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Categories List</a></li>
+                        <li><a href="{{ route('admin.categories.create') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Add Category</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.users') }}" class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 group">
+                        <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        Users
+                    </a>
+                </li>
             </ul>
         </nav>
+
+        <div class="p-4 border-t border-white/20">
+            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-3 rounded-lg hover:bg-red-500/20 transition-all duration-200 text-red-300 group">
+                <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Logout
+            </a>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
+                @csrf
+            </form>
+        </div>
     </aside>
 
-    <main class="flex-1 flex flex-col overflow-hidden">
-
-        <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold text-gray-800">
-                @yield('page-title')
-            </h1>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden main-bg">
+        <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b border-gray-200">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">@yield('page-title')</h1>
+                <p class="text-sm text-gray-600 mt-1">Welcome back, {{ auth()->user()->name ?? 'Admin' }}</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name ?? 'Admin' }}</p>
+                    <p class="text-xs text-gray-500">Administrator</p>
+                </div>
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                </div>
+            </div>
         </header>
 
         <section class="flex-1 p-6 overflow-y-auto">
-            <div class="bg-white rounded-xl shadow p-6">
+            <div class="bg-white rounded-xl card-shadow p-6">
                 @yield('content')
             </div>
         </section>
+    </main>
+</body>
+</html>
 
     </main>
 

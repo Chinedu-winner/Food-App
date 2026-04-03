@@ -5,11 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration{
-    public function up(): void{
-        // Column 'role' is already defined in 0001_01_01_000000_create_users_table.php
+    public function up(){
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('user'); // roles: user, admin
+        });
     }
 
-    public function down(): void{
-        //
+    public function down(){
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
     }
 };

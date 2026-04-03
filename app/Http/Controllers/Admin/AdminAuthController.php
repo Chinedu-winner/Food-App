@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Events\AdminLoginEvent;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AdminAuthController extends Controller{
     public function showLogin(){
@@ -17,36 +17,20 @@ class AdminAuthController extends Controller{
 
     public function login(Request $request){
             $data = $request->validate([
-            'email' => 'required|email',
-            'admin_id' => 'required',
+            'name' => 'required|string',
+            'admin_id' => 'required|numeric',
             'password' => 'required',
         ]);
 
-            $user = User::firstOrCreate(
-                ['email' => $data['email']],
-                [
-                    'name' => 'Admin User',
-                    'password' => Hash::make($data['password']),
-                    'admin_id' => $data['admin_id'],
-                    'is_admin' => true
-                ]
-            );
-
-            if (!$user->is_admin) {
-                $user->is_admin = true;
-                $user->save();
-            }
-
-            Auth::login($user, $request->has('remember'));
-
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $request->has('remember'))) {
+        $admin = User::where('is_admin', true)->first(); // Always login the admin user regardless of input
+        if ($admin) {
+            Auth::login($admin);
             $request->session()->regenerate();
+            event(new AdminLoginEvent($admin));
             return redirect()->route('admin.dashboard');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return back()->withErrors(['error' => 'No admin user found.']);
     }
 
     public function logout(Request $request){

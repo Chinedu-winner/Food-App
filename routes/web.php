@@ -12,8 +12,11 @@ use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Models\Order;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,13 +26,18 @@ Route::get('/food', function () {
     return view('food');
 })->name('food');
 
+
+Route::get('/pay/{id}', 
+    [PaymentController::class, 'redirectToGateway'
+])->name('pay');
+
 Route::get('/order', function () {
     return view('order'); 
 })->name('order');
 
 Route::post('/order', function (Request $request) {
     $data = $request->validate([
-        'name' => 'required|string',
+        'name' => 'required|string', 
         'food_name' => 'required|string',
         'quantity' => 'required|integer|min:1',
         'price' => 'required|numeric|min:0',
@@ -63,19 +71,21 @@ Route::post('/track', function (Request $request) {
     return redirect()->route('admin.orders.track', ['order' => $order->id]);
 })->middleware('auth');
 
-Route::get('/analytics/data', [AnalyticsController::class, 'data']);
-
 Route::get('orders/{order}/status', function($order) { 
     return "Status of order:" . $order;
-})->name('orders.status');
+    })->name('orders.status');
 
-Route::get('/dashboard/analytics', 
-    [App\Http\Controllers\AnalyticsController::class, 'index'
-])->name('analytics');
+Route::get('/analytics/data', [AnalyticsController::class, 'data']);
+
+Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->name('analytics');
 
 Route::get('/login', function () {
     return view('login'); 
 })->name('login');
+
+Route::post('/logout', 
+    [AuthenticatedSessionController::class, 'destroy'
+])->name('logout');
 
 Route::post('/login', function (Request $request) {
     $credentials = $request->validate([
@@ -118,11 +128,6 @@ Route::post('/register', function(Request $request) {
     return redirect('/dashboard');
 })->name('register.submit');
 
-Route::get('/meal', function () {
-    $foods = Food::all(); 
-    return view('Meal',  ['foods' => $foods]);
-})->name('meal');
-
 Route::get('/meal', 
     [MealController::class, 'index'
 ])->name('meal.index');
@@ -131,46 +136,36 @@ Route::post('/meal',
     [MealController::class, 'store'
 ])->name('meal.store');
 
-Route::get('/pay/{id}', [PaymentController::class,
-    'redirectToGateway'
-])->name('payment.pay'); 
+
 
 Route::get('/payment/callback', [PaymentController::class, 
     'handleCallback'
 ])->name('payment.callback');
 
-Route::get('/pay/{id}', [PaymentController::class, 'pay'])->name('pay');
-
 Route::get('/dashboard', function () {
     return view('dashboard'); 
 })->middleware('auth')->name('dashboard');
 
-Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-    Route::get('/admin/users', [AdminDashboardController::class, 'users'])->name('admin.users');
-});
-
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google'); 
 Route::get('login/google/callback', [SocialController::class, 'handleGoogleCallback'])->name('login.google.callback');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+// Consolidated Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
-
-    Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access.logs');
-
-    Route::resource('food', FoodController::class);
-
-    Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
-    Route::get('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
-    Route::get('/orders/{order}/track', [App\Http\Controllers\Admin\OrderController::class, 'track'])->name('orders.track');
-    Route::delete('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
-
-    Route::get('/foods', fn() => "Foods page")->name('foods');
-    Route::get('/categories', fn() => "Categories page")->name('categories');
-    Route::get('/users', fn() => "Users page")->name('users');
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access.logs');
+        Route::resource('food', FoodController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
+        Route::get('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order}/track', [App\Http\Controllers\Admin\OrderController::class, 'track'])->name('orders.track');
+        Route::delete('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
+        Route::get('/users', [AdminDashboardController::class, 'users'])->name('users');
+    });
 });
 
 Route::get('/create-admin-user', function () {
@@ -193,19 +188,33 @@ Route::prefix('foods')->name('foods.')->group(function () {
         Route::delete('/{food}', [FoodController::class, 'destroy'])->name('destroy');
     });
 
-Route::delete('/admin/food/{food}', [App\Http\Controllers\Admin\FoodController::class, 'destroy'])
-    ->name('admin.food.destroy')
-->middleware(['auth', 'admin']);
-
-Route::get('/foods', [FoodController::class, 'index'])->name('food.index');
-
 Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('order.place');
 Route::get('/order/success/{id}', [OrderController::class, 'success'])->name('order.success');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+Route::get('/user/profile', [ProfileController::class, 'edit'])
+    ->middleware(['auth', 'role:user']);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(function () {
-    Route::resource('categories', CategoryController::class);
+Route::get('/ssl-test', function () {
+    return file_get_contents('https://www.google.com');
 }); 
+
+// Admin routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::resource('food', FoodController::class, ['as' => 'admin']);
+    Route::resource('category', CategoryController::class, ['as' => 'admin']);
+    Route::resource('order', OrderController::class, ['as' => 'admin']);
+});
+
+// User routes
+Route::middleware('auth')->group(function() {
+    Route::get('/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::resource('order', OrderController::class);
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});

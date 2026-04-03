@@ -1,6 +1,15 @@
 @extends('layout')
 
 @section('content')
+<form method="GET" action="{{ route('analytics') }}" class="mb-6 flex gap-4">
+    <select name="range" onchange="this.form.submit()" class="p-2 border rounded">
+        <option value="7" {{ request('range') == 7 ? 'selected' : '' }}>Last 7 Days</option>
+        <option value="30" {{ request('range') == 30 ? 'selected' : '' }}>Last 30 Days</option>
+        <option value="90" {{ request('range') == 90 ? 'selected' : '' }}>Last 3 Months</option>
+    </select>
+
+    <button class="bg-blue-500 text-white px-4 py-2 rounded">Apply</button>
+</form>
 
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold mb-6">Analytics Structure</h1>
@@ -25,28 +34,18 @@
     </div>
 
     <div class="grid grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-lg shadow">
+        <div class="bg-gray-50 p-6 rounded-lg shadow">
             <h3 class="text-lg font-semibold mb-4">Orders Last 6 Months</h3>
             <canvas id="ordersChart"></canvas>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow">
+        <div class="bg-gray-50 p-6 rounded-lg shadow">
             <h3 class="text-lg font-semibold mb-4">Top 5 Foods</h3>
             <canvas id="topFoodsChart"></canvas>
         </div>
     </div>
 </div>
-<form method="GET" action="{{ route('analytics') }}" class="mb-6 flex gap-4">
-    <select name="range" class="p-2 border rounded">
-        <option value="7" {{ request('range') == 7 ? 'selected' : '' }}>Last 7 Days</option>
-        <option value="30" {{ request('range') == 30 ? 'selected' : '' }}>Last 30 Days</option>
-        <option value="90" {{ request('range') == 90 ? 'selected' : '' }}>Last 3 Months</option>
-    </select>
 
-    <button class="bg-blue-500 text-white px-4 py-2 rounded">
-        Apply
-    </button>
-</form>
 @endsection
 
 @section('scripts')
@@ -56,10 +55,11 @@
     const ordersChart = new Chart(ordersCtx, {
         type: 'line',
         data: {
-        labels: @json($monthlyOrders->pluck('month')),
+        labels: @json($ordersChart->pluck('date')),
+        data: @json($ordersChart->pluck('total')),
             datasets: [{
                 label: 'Orders',
-                data: @json($monthlyOrders->pluck('total')),
+                data: @json($ordersChart->pluck('total')),
                 backgroundColor: 'rgba(79, 70, 229, 0.2)',
                 borderColor: 'rgba(79, 70, 229, 1)',
                 borderWidth: 2,
@@ -88,7 +88,12 @@
     });
 
     setInterval(() => {
-    location.reload();
-}, 30000); // refresh every 30 seconds
+    const params = new URLSearchParams(window.location.search);
+    window.location.href = window.location.pathname + '?' + params.toString();
+}, 30000);
+
+//     setInterval(() => {
+//     location.reload();
+// }, 30000); // refresh every 30 seconds
 </script>
 @endsection

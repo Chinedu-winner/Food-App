@@ -30,10 +30,10 @@ class AdminDashboardController extends Controller{
                         ->groupBy('month')
                         ->get();
 
-    $users = User::latest()->take(10)->get(); // only 10 users for preview
-            
-        return view('admin.dashboard', compact('user', 'recentLogins', 'users',  'totalFoods', 'latestFoods', 'loginsByMonth'));
-    }
+    $users = User::latest()->take(10)->get(); // only 10 users for preview    
+        return view('admin.dashboard', compact('user', 'recentLogins', 'users', 'totalFoods', 'latestFoods', 'loginsByMonth'
+    ));   
+}
 
 
     public function users(){ //fOR the admin to view all users

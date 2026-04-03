@@ -30,7 +30,7 @@ class PaymentController extends Controller{
             return redirect($response->data->authorization_url);
 
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage(),"Paying for food ID: " . $id);
         }
     }
 

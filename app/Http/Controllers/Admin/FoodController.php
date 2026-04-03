@@ -13,8 +13,7 @@ class FoodController extends Controller{
     }
 
     public function index() {
-        $foods = Food::with('category')->paginate(10);
-
+        $foods = Food::with('category')->paginate(26);
         $foodsByCategory = $foods->groupBy(function($food) {
             return $food->category ? $food->category->name : 'Uncategorized';
         });
@@ -41,7 +40,7 @@ class FoodController extends Controller{
             $validated['image'] = $request->file('image')->store('foods', 'public');
         }
 
-        Food::create($validated);
+        $food = Food::create($validated);
         Activity::create([
             'action' => 'added',
             'food_name' => $food->name,
@@ -53,6 +52,8 @@ class FoodController extends Controller{
     public function edit($id){
         $food = \App\Models\Food::findOrFail($id);
         $categories = Category::all();
+
+        $this->authorize('update', $food); 
         return view('admin.foods.edit', compact('food', 'categories'));
     }
 
@@ -79,6 +80,7 @@ class FoodController extends Controller{
     }
 
     public function destroy(Food $food){ 
+        $this->authorize('delete', $food);
         $foodName = $food->name;
         $food->delete();
 
@@ -87,9 +89,9 @@ class FoodController extends Controller{
             'food_name' => $foodName,
         ]);
 
-        return redirect()->route('admin.foods.index')
-            ->with('success', 'Food deleted successfully.');
+        return redirect()->route('admin.foods.index')->with('success', 'Food deleted successfully.');
     }
+
     public function showMeal(){
     $foods = Food::all(); // or paginate()
     $categories = Category::all();

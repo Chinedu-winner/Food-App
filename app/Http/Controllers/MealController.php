@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 use App\Models\Food; 
 use Illuminate\Http\Request;
 class MealController extends Controller{
-
     public function index(){
-            $foods = Food::with('category')
-                ->where('status', 'active')
-                ->get();
-                // dd($foods);
-                return view('meal', compact('foods'));
+        $foods = Food::with('category')
+            ->where('status', 'active')
+            ->get();
+        return view('meal', compact('foods'));
     }
 
 public function store(Request $request){
@@ -21,7 +19,6 @@ public function store(Request $request){
         'description' => $request->description,
         'status' => 'active'
     ]);
-
     return redirect()->route('meal.index')
         ->with('success', 'Meal added successfully!');
 }
