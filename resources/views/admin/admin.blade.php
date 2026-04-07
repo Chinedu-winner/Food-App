@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js" type="module"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>@yield('page-title', 'Admin Dashboard') - FoodWin</title>
     <style>
         .sidebar-gradient { background: linear-gradient(135deg, #0f766e 0%, #059669 100%);}.main-bg {background: #f8fafc;}.card-shadow {box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);}
@@ -36,7 +37,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
                         </svg>
-                        Dashboard
+                        Dashboard   
                     </a>
                 </li>
 
@@ -67,8 +68,8 @@
                         </svg>
                     </span>
                     <ul class="hidden group-hover:block absolute left-full top-0 bg-white text-gray-800 w-56 shadow-2xl rounded-lg overflow-hidden border border-gray-200 z-50">
-                        <li><a href="{{ route('admin.food.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Food List</a></li>
-                        <li><a href="{{ route('admin.food.create') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Add Food</a></li>
+                        <li><a href="{{ route('admin.foods.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Food List</a></li>
+                        <li><a href="{{ route('admin.foods.create') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Add Food</a></li>
                     </ul>
                 </li>
 
@@ -100,7 +101,7 @@
         </nav>
 
         <div class="p-4 border-t border-white/20">
-            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-3 rounded-lg hover:bg-red-500/20 transition-all duration-200 text-red-300 group">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-3 rounded-lg hover:bg-red-500/20 transition-all duration-200 text-red-300 group">
                 <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                 </svg>
@@ -119,13 +120,23 @@
                 <h1 class="text-2xl font-bold text-gray-900">@yield('page-title')</h1>
                 <p class="text-sm text-gray-600 mt-1">Welcome back, {{ auth()->user()->name ?? 'Admin' }}</p>
             </div>
-            <div class="flex items-center space-x-4">
-                <div class="text-right">
-                    <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name ?? 'Admin' }}</p>
-                    <p class="text-xs text-gray-500">Administrator</p>
-                </div>
-                <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+            <div x-data="{ open: false }" class="relative">
+                <!-- Avatar Button -->
+                <button @click="open = !open" class="focus:outline-none">
+                    <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" class="w-10 h-10 rounded-full object-cover border-2 border-gray-300">
+                </button>
+
+                <!-- Dropdown -->
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50" style="display: none;">
+                    <div class="px-4 py-2 border-b">
+                        <p class="text-sm font-semibold">{{ auth()->user()->name }}</p>
+                        <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
+                    </div>
+                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">Profile</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:text-red-700">Logout</button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -136,9 +147,6 @@
             </div>
         </section>
     </main>
+    @stack('scripts')
 </body>
 </html>
-
-    </main>
-
-    @stack('scripts')

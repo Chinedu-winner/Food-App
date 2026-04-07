@@ -7,8 +7,42 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller{
+    public function userOrders(Request $request){
+        $orders = Order::query()
+            ->where('user_id', Auth::id())
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $term = trim((string) $request->input('q'));
+
+                $query->where(function ($subQuery) use ($term) {
+                    $subQuery->where('status', 'like', '%' . $term . '%')
+                        ->orWhere('id', 'like', '%' . $term . '%');
+                });
+            })
+            ->when($request->filled('status') && $request->status !== 'all', function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->when($request->filled('from_date'), function ($query) use ($request) {
+                $query->whereDate('created_at', '>=', $request->from_date);
+            })
+            ->when($request->filled('to_date'), function ($query) use ($request) {
+                $query->whereDate('created_at', '<=', $request->to_date);
+            })
+            ->when($request->filled('min_total'), function ($query) use ($request) {
+                $query->where(DB::raw('COALESCE(total, total_price)'), '>=', (float) $request->min_total);
+            })
+            ->when($request->filled('max_total'), function ($query) use ($request) {
+                $query->where(DB::raw('COALESCE(total, total_price)'), '<=', (float) $request->max_total);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('order', compact('orders'));
+    }
+
     public function track(Order $order){
         return view('orders.track', ['order' => $order]);
     }

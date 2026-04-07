@@ -13,6 +13,7 @@ class User extends Authenticatable{
         'name',
         'email',
         'password',
+        'profile_photo',
         'phone',
         'role',
         'address',
@@ -24,11 +25,6 @@ class User extends Authenticatable{
         'is_admin',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',

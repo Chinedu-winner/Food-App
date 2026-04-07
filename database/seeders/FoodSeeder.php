@@ -7,13 +7,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Food;
 use App\Models\Category;
 
-class FoodSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
+class FoodSeeder extends Seeder{
+    public function run(): void{
         // Get or create categories
         $nigerianCategory = Category::firstOrCreate(
             ['name' => 'Nigerian'],

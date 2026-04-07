@@ -7,7 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 flex items-center justify-center min-h-screen font-sans">
+<body class="bg-gray-300 flex items-center justify-center min-h-screen font-sans">
 
 <div class="bg-white/90 backdrop-blur-md p-10 rounded-2xl shadow-2xl w-full max-w-md border border-white/30">
 

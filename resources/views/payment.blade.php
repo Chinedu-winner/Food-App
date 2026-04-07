@@ -6,7 +6,7 @@
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-<div class="bg-white shadow-xl rounded-xl p-8 w-[400px]">
+<div class="bg-white shadow-hxl rounded-xl p-8 w-[400px]">
     <h2 class="text-2xl font-bold text-green-600 mb-4">Payment Successful</h2>
 
 <p class="mb-2">

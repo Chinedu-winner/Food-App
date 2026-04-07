@@ -7,10 +7,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class MigrateMealToFoodsSeeder extends Seeder{
-   use App\Models\Food;
+    use App\Models\Food;
 
-public function run(): void
-{
+public function run(): void{
     Food::create([
         'name' => 'Smoky Jollof Rice',
         'description' => 'Classic party Jollof rice served with fried plantain and grilled chicken.',

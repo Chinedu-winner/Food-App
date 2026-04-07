@@ -1,15 +1,20 @@
 <?php
 use App\Http\Controllers\Admin\AdminAccessLogController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Food;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\MealController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\LoginController; 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Models\Order;
 use App\Http\Controllers\Admin\CategoryController;
@@ -19,21 +24,25 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/food', function () {
     return view('food');
-})->name('food');
+})->middleware('auth')->name('food');
 
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
 
 Route::get('/pay/{id}', 
     [PaymentController::class, 'redirectToGateway'
-])->name('pay');
+])->middleware('auth')->name('pay');
 
-Route::get('/order', function () {
-    return view('order'); 
-})->name('order');
+Route::get('/order', 
+    [OrderController::class, 'userOrders'
+])->middleware('auth')->name('order');
 
 Route::post('/order', function (Request $request) {
     $data = $request->validate([
@@ -73,15 +82,15 @@ Route::post('/track', function (Request $request) {
 
 Route::get('orders/{order}/status', function($order) { 
     return "Status of order:" . $order;
-    })->name('orders.status');
+    })->middleware('auth')->name('orders.status');
 
-Route::get('/analytics/data', [AnalyticsController::class, 'data']);
+Route::get('/analytics/data', [AnalyticsController::class, 'data'])->middleware('auth');
 
-Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->middleware('auth')->name('analytics');
 
-Route::get('/login', function () {
-    return view('login'); 
-})->name('login');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::post('/logout', 
     [AuthenticatedSessionController::class, 'destroy'
@@ -100,15 +109,19 @@ Route::post('/login', function (Request $request) {
 
     return back()->withErrors(['email' => 'The provided credentials do not match our records.'])
         ->onlyInput('email');
-})->name('login.submit');
+})->middleware('guest')->name('login.submit');
 
 Route::get('/register', function () {
-    return view('register'); 
-})->name('register');
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
 
-Route::get('/dashboard/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::get('/dashboard/orders/search-food', [OrderController::class, 'searchFood'])->name('orders.searchFood');
-Route::post('/dashboard/orders/add-item/{food}', [OrderController::class, 'addItem'])->name('orders.addItem');
+    return view('register');
+})->middleware('guest')->name('register');
+
+Route::get('/dashboard/orders/create', [OrderController::class, 'create'])->middleware('auth')->name('orders.create');
+Route::get('/dashboard/orders/search-food', [OrderController::class, 'searchFood'])->middleware('auth')->name('orders.searchFood');
+Route::post('/dashboard/orders/add-item/{food}', [OrderController::class, 'addItem'])->middleware('auth')->name('orders.addItem');
 
 Route::post('/register', function(Request $request) {
     $data = $request->validate([
@@ -125,16 +138,16 @@ Route::post('/register', function(Request $request) {
 
     Auth::login($user);
 
-    return redirect('/dashboard');
-})->name('register.submit');
+    return redirect()->route('dashboard');
+})->middleware('guest')->name('register.submit');
 
 Route::get('/meal', 
     [MealController::class, 'index'
-])->name('meal.index');
+])->middleware('auth')->name('meal.index');
 
 Route::post('/meal', 
     [MealController::class, 'store'
-])->name('meal.store');
+])->middleware('auth')->name('meal.store');
 
 
 
@@ -149,8 +162,8 @@ Route::get('/dashboard', function () {
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google'); 
 Route::get('login/google/callback', [SocialController::class, 'handleGoogleCallback'])->name('login.google.callback');
 
-// Consolidated Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+
+Route::prefix('admin')->name('admin.')->group(function () {// Consolidated Admin Routes
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
@@ -177,44 +190,85 @@ Route::get('/create-admin-user', function () {
         'is_admin' => true,
     ]);
     return "Admin user created! Email: admin@foodwin.com, Password: password123, Admin ID: 12345";
-});  
+})->middleware(['auth', 'admin']);  
 
-Route::prefix('foods')->name('foods.')->group(function () {
-        Route::get('/', [FoodController::class, 'index'])->name('index');
-        Route::get('/create', [FoodController::class, 'create'])->name('create');
-        Route::post('/', [FoodController::class, 'store'])->name('store');
-        Route::get('/{food}/edit', [FoodController::class, 'edit'])->name('edit');
-        Route::put('/{food}', [FoodController::class, 'update'])->name('update');
-        Route::delete('/{food}', [FoodController::class, 'destroy'])->name('destroy');
-    });
+Route::prefix('admin/foods')->name('admin.foods.')->group(function () {
+    Route::get('/', [FoodController::class, 'index'])->name('index');
+    Route::get('/create', [FoodController::class, 'create'])->name('create');
+    Route::post('/', [FoodController::class, 'store'])->name('store');
+    Route::get('/{food}/edit', [FoodController::class, 'edit'])->name('edit');
+    Route::put('/{food}', [FoodController::class, 'update'])->name('update');
+    Route::delete('/{food}', [FoodController::class, 'destroy'])->name('destroy');
+});
 
 Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('order.place');
 Route::get('/order/success/{id}', [OrderController::class, 'success'])->name('order.success');
 
-Route::get('/user/profile', [ProfileController::class, 'edit'])
-    ->middleware(['auth', 'role:user']);
 
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-});
-
-Route::get('/ssl-test', function () {
-    return file_get_contents('https://www.google.com');
-}); 
-
-// Admin routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {// Admin routes
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('food', FoodController::class, ['as' => 'admin']);
     Route::resource('category', CategoryController::class, ['as' => 'admin']);
     Route::resource('order', OrderController::class, ['as' => 'admin']);
 });
 
-// User routes
 Route::middleware('auth')->group(function() {
-    Route::get('/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
-    Route::resource('order', OrderController::class);
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::middleware(['auth'])->group(function () {
+    Route::put('/user/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+});
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('logout.get');
+
+Route::middleware('auth')->prefix('settings')->name('settings.')->group(function () {
+    Route::get('/', [SettingsController::class, 'index'])->name('index');
+    Route::get('/edit', [SettingsController::class, 'edit'])->name('edit');
+
+    Route::post('/app', [SettingsController::class, 'updateAppSettings'])->name('app.update');
+    Route::post('/profile', [SettingsController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/notifications', [SettingsController::class, 'updateNotifications'])->name('notifications.update');
+    Route::post('/password', [SettingsController::class, 'updatePassword'])->name('password.update');
+
+    Route::get('/verify-sms', [SettingsController::class, 'showSmsForm'])->name('sms.verify');
+    Route::get('/sms/code', [SettingsController::class, 'showSmsConfirmPage'])->name('sms.code');
+    Route::post('/send-sms-code', [SettingsController::class, 'sendSmsCode'])->name('sms.send');
+    Route::post('/confirm-sms-code', [SettingsController::class, 'confirmSmsCode'])->name('sms.confirm');
+
+    Route::get('/email/verify', [SettingsController::class, 'verifyEmail'])->name('email.verify');
+    Route::get('/email/page', [SettingsController::class, 'showEmailVerifyPage'])->name('email.page');
+    Route::post('/email/send', [SettingsController::class, 'sendEmailVerification'])->name('email.send');
+});
+
+// Email verification routes (used by MustVerifyEmail)
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect()->route('dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::fallback(function () {
+    return Auth::check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Activity;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
 use App\Models\Food;
 use App\Models\Category;
 
@@ -53,7 +54,7 @@ class FoodController extends Controller{
         $food = \App\Models\Food::findOrFail($id);
         $categories = Category::all();
 
-        $this->authorize('update', $food); 
+        // $this->authorize('update', $food); 
         return view('admin.foods.edit', compact('food', 'categories'));
     }
 

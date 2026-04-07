@@ -43,7 +43,7 @@ class AdminDashboardController extends Controller{
 
 public function index(){
     $totalFoods = Food::count();
-
+    $user = auth()->user();
     $latestFoods = Food::latest()->take(5)->get();
 
     return view('admin.dashboard', compact('totalFoods', 'latestFoods'));

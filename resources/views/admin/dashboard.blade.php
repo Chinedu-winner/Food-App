@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-900">Manage Users</p>
+                    <p class="text-sm font-medium text-gray-900">Manage Users</p>   
                     <p class="text-xs text-gray-500">View and edit user profiles</p>
                 </div>
             </a>
