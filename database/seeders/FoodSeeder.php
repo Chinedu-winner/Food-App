@@ -29,7 +29,7 @@ class FoodSeeder extends Seeder{
             ['name' => 'Goat Meat Pepper Soup', 'category_id' => $nigerianCategory->id, 'price' => 11.00, 'description' => 'Hot and spicy broth made with tender goat meat and herbs.'],
             ['name' => 'Moi Moi', 'category_id' => $nigerianCategory->id, 'price' => 5.00, 'description' => 'Steamed bean pudding made with peppers, onions, and egg.'],
             ['name' => 'Akara', 'category_id' => $nigerianCategory->id, 'price' => 4.50, 'description' => 'Crispy fried bean cakes, perfect for breakfast or a snack.'],
-            ['name' => 'Banga Soup & Starch', 'category_id' => $nigerianCategory->id, 'price' => 16.00, 'description' => 'Palm nut soup served with traditional starch or pounded yam.'],
+            ['name' => 'Banga Soup & Starch', 'category_id' => $nigerianCategory->id, 'price' => 16.00, 'description' => 'Palm nut soup served with traditional starch or pounded~ yam.'],
             ['name' => 'Ofada Rice & Sauce', 'category_id' => $nigerianCategory->id, 'price' => 13.99, 'description' => 'Local rice variety served with spicy Ayamase pepper sauce.'],
             ['name' => 'Afang Soup', 'category_id' => $nigerianCategory->id, 'price' => 15.00, 'description' => 'Nutritious vegetable soup native to the Efik people, served with fufu.'],
             ['name' => 'Edikang Ikong', 'category_id' => $nigerianCategory->id, 'price' => 15.50, 'description' => 'Vegetable soup made with pumpkin leaves and waterleaf, rich in meat.'],

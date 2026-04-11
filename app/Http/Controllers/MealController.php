@@ -8,7 +8,9 @@ class MealController extends Controller{
         $foods = Food::with('category')
             ->where('status', 'active')
             ->get();
-        return view('meal', compact('foods'));
+        $food = $foods->first();
+
+        return view('meal', compact('foods', 'food'));
     }
 
 public function store(Request $request){

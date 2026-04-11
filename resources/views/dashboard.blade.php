@@ -35,9 +35,6 @@
 
     <!-- Other menu items -->
     <li class="px-4 py-2 rounded-lg text-white hover:bg-gray-50 hover:bg-opacity-20 flex items-center gap-2 cursor-pointer transition-all duration-200">
-        <a href="{{ route('admin.login') }}" class="flex items-center gap-2 text-white hover:text-white">👥 Admin page</a>
-    </li>
-    <li class="px-4 py-2 rounded-lg text-white hover:bg-gray-50 hover:bg-opacity-20 flex items-center gap-2 cursor-pointer transition-all duration-200">
         <a href="{{ route('order') }}" class="flex items-center gap-2 text-white hover:text-white">🛒 Orders</a>
     </li>
     <li class="px-4 py-2 rounded-lg text-white hover:bg-gray-50 hover:bg-opacity-20 flex items-center gap-2 cursor-pointer transition-all duration-200">

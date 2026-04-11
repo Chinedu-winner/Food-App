@@ -12,25 +12,30 @@ class AdminAuthController extends Controller{
         if (Auth::check() && Auth::user()->is_admin) {
             return redirect()->route('admin.dashboard');
         }
+
         return view('admin.login');
     }
 
     public function login(Request $request){
-            $data = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string',
             'admin_id' => 'required|numeric',
             'password' => 'required',
         ]);
 
-        $admin = User::where('is_admin', true)->first(); // Always login the admin user regardless of input
-        if ($admin) {
-            Auth::login($admin);
+        $admin = User::where('name', $data['name'])
+            ->where('admin_id', $data['admin_id'])
+            ->where('is_admin', true)
+            ->first();
+
+        if ($admin && Auth::attempt(['email' => $admin->email, 'password' => $data['password']])) {
             $request->session()->regenerate();
             event(new AdminLoginEvent($admin));
+
             return redirect()->route('admin.dashboard');
         }
 
-        return back()->withErrors(['error' => 'No admin user found.']);
+        return back()->withErrors(['error' => 'Invalid admin credentials.'])->withInput();
     }
 
     public function logout(Request $request){

@@ -59,10 +59,12 @@ class OrderController extends Controller{
             'updated_at' => $order->updated_at,
         ]);
     }
+    
     public function index(){
         $orders = Order::with('items.food')->latest()->get();
         return view('admin.orders.index', compact('orders'));
     }
+
     public function store(Request $request){
         $request->validate([
             'cart' => 'required|array|min:1',
@@ -129,8 +131,7 @@ class OrderController extends Controller{
         return $dot / (sqrt($normA) * sqrt($normB) + 1e-8);
     }
 
-    public function addItem(Food $food)
-{
+    public function addItem(Food $food){
     $order = auth()->user()->currentOrder(); // your logic to get current order
     $order->items()->create([
         'food_id' => $food->id,
@@ -138,5 +139,5 @@ class OrderController extends Controller{
     ]);
 
     return back()->with('success', 'Food added to order!');
-}
     }
+}

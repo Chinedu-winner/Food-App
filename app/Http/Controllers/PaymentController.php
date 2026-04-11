@@ -72,4 +72,42 @@ class PaymentController extends Controller{
 
         return redirect('/meal')->with('error', 'Payment failed.');
     }
+
+    public function process(Request $request) {
+        $user = Auth::user();
+        $amount = $request->amount;     
+        $payment = new Payment();
+        $payment->user_id = $user->id;
+        $payment->amount = $amount;
+        $payment->status = 'pending';
+        $payment->save();       
+        return redirect()->back()->with('success', 'Payment initiated.');
+    }
+
+    public function success($id){
+        $payment = Payment::findOrFail($id);
+        return view('payment', [
+            'payment' => $payment,
+            'meal' => $payment->meal 
+        ]);
+    }
+
+    // Payment.php model
+    public function meal(){
+        return $this->belongsTo(Meal::class);
+    }
+
+    public function store($id){
+        $user = auth()->user(); 
+        $meal = Meal::findOrFail($id);
+
+        $payment = new Payment();
+        $payment->user_id = $user->id;
+        $payment->meal_id = $meal->id;
+        $payment->amount = $meal->price; 
+        $payment->status = 'pending';
+        $payment->save();
+
+        return redirect()->route('payment.success', ['id' => $payment->id]);
+    }
 }

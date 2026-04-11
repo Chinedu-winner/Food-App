@@ -63,6 +63,10 @@ Route::post('/order', function (Request $request) {
     return redirect()->route('track', ['order' => $order->id])->with('success', 'Order placed successfully!');
 })->middleware('auth');
 
+Route::get('/payment-success/{id}', 
+    [PaymentController::class, 'success'
+])->name('payment.success');
+
 Route::get('/track', function () {
     return view('track'); 
 })->middleware('auth')->name('track');
@@ -149,7 +153,7 @@ Route::post('/meal',
     [MealController::class, 'store'
 ])->middleware('auth')->name('meal.store');
 
-
+Route::post('/pay', [PaymentController::class, 'process'])->name('pay');
 
 Route::get('/payment/callback', [PaymentController::class, 
     'handleCallback'

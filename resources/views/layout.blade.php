@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'Food App')</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @if (file_exists(public_path('css/app.css')))
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @else
+        <script src="https://cdn.tailwindcss.com"></script>
+    @endif
 </head>
 <body class="bg-gray-50">
     <nav class="bg-gray-800 p-4 text-white flex justify-between">
