@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Food;
 use Carbon\Carbon;
 use App\Models\User;
@@ -8,17 +9,12 @@ use App\Models\AdminAccessLog;
 use App\Models\Category;
 
 class AdminDashboardController extends Controller{
-    public function __construct(){
-        $this->middleware(['admin']); 
-    }
-
     public function dashboard(){
-        $user = auth()->user();
-            $twelveMonthsAgo = Carbon::now()->subMonths(12);
-    
-                $latestFoods = Food::latest()->take(5)->get(); 
+        $user = Auth::guard('web')->user();
+        $twelveMonthsAgo = Carbon::now()->subMonths(12);
 
-                $totalFoods = Food::count(); 
+            $latestFoods = Food::latest()->take(5)->get();      
+            $totalFoods = Food::count(); 
 
         $recentLogins = AdminAccessLog::with('admin')
                             ->where('created_at', '>=', $twelveMonthsAgo)
@@ -35,8 +31,7 @@ class AdminDashboardController extends Controller{
     ));   
 }
 
-
-    public function users(){ //fOR the admin to view all users
+    public function users(){ //for the admin to view all users
         $users = User::all();
         return view('admin.user', compact('users'));
     }
@@ -47,5 +42,5 @@ public function index(){
     $latestFoods = Food::latest()->take(5)->get();
 
     return view('admin.dashboard', compact('totalFoods', 'latestFoods'));
-}
+    }
 }

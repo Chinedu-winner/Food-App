@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminAuth {
     public function handle(Request $request, Closure $next){
-        if (Auth::check() && Auth::user()->is_admin) {
-            return $next($request);
-        }
-
-        return redirect()->route('admin.login');
+    return $next($request);
     }
 }

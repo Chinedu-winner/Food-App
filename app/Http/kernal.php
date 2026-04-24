@@ -30,6 +30,5 @@ class Kernel extends HttpKernel{
         'admin' => \App\Http\Middleware\AdminAuth::class,
         'is_admin' => \App\Http\Middleware\IsAdmin::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
-
     ];
 } 

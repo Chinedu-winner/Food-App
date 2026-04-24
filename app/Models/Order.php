@@ -13,7 +13,6 @@ use Illuminate\Support\Carbon;
 class Order extends Model{
     use HasFactory;
 
-    // Order statuses
     public const STATUS_PENDING   = 'pending';
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_PREPARING = 'preparing';
@@ -21,9 +20,15 @@ class Order extends Model{
     public const STATUS_DELIVERED = 'delivered';
     public const STATUS_CANCELLED = 'cancelled';
 
+    public function items(){
+    return $this->hasMany(OrderItem::class);
+    }
+
     protected $fillable = [
         'user_id',
+        'name',
         'total',
+        'total_price',
         'status',
         'notes',
         'latitude',
@@ -31,7 +36,7 @@ class Order extends Model{
         'address',
         'phone',
     ];
-
+ 
     protected $casts = [
         'total'     => 'decimal:2',
         'latitude'  => 'decimal:7',

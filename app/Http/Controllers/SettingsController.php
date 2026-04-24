@@ -10,8 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class SettingsController extends Controller{
-    private function defaultAppSettings(): array
-    {
+    private function defaultAppSettings(): array{
         return [
             'language' => 'en',
             'timezone' => config('app.timezone', 'UTC'),
@@ -219,4 +218,5 @@ class SettingsController extends Controller{
     public function verifyEmail(): RedirectResponse{
         return redirect()->route('settings.email.page');
     }
+
 }

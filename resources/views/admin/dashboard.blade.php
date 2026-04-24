@@ -198,7 +198,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.food.index') }}" class="flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors duration-200 group">
+            <a href="{{ route('admin.foods.index') }}" class="flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors duration-200 group">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +212,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('admin.orders') }}" class="flex items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors duration-200 group">
+            <a href="{{ route('orders.index') }}" class="flex items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors duration-200 group">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,7 +230,7 @@
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a href="{{ route('admin.food.create') }}" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 group">
+        <a href="{{ route('admin.foods.create') }}" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 group">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +258,7 @@
             </div>
         </a>
 
-        <a href="{{ route('admin.orders') }}" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 group">
+        <a href="{{ route('orders.index') }}" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 group">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                     <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class OrderController extends Controller{
     public function userOrders(Request $request){
@@ -44,7 +45,7 @@ class OrderController extends Controller{
     }
 
     public function track(Order $order){
-        return view('orders.track', ['order' => $order]);
+        return view('admin.orders.track', ['order' => $order]);
     }
 
     public function status(Order $order): JsonResponse{
@@ -76,12 +77,20 @@ class OrderController extends Controller{
             return $item['price'] * $item['quantity'];
         });
     
-        $order = Order::create([
+        $user = Auth::user();
+
+        $orderData = [
             'user_id' => Auth::id(),
             'total_price' => $totalPrice,
-            'address' => Auth::user()->address,
+            'address' => $user->address,
             'status' => 'pending',
-    ]);
+        ];
+
+        if (Schema::hasColumn('orders', 'name')) {
+            $orderData['name'] = $user->name;
+        }
+
+        $order = Order::create($orderData);
 
 
         foreach ($cartItems as $item) {

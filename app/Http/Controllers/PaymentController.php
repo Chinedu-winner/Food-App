@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payment;
+use App\Models\Meal;
+use Illuminate\Support\Facades\Schema;
 use Yabacon\Paystack;
 
 class PaymentController extends Controller{
@@ -12,6 +17,7 @@ class PaymentController extends Controller{
         $food = Food::findOrFail($id);
 
         session([
+            'meal_id' => $food->id,
             'meal_name' => $food->name,
             'meal_price' => $food->price,
             'meal_quantity' => 1,
@@ -30,7 +36,7 @@ class PaymentController extends Controller{
             return redirect($response->data->authorization_url);
 
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage(),"Paying for food ID: " . $id);
+            return back()->with('error', $e->getMessage() . " (Error paying for food ID: " . $id . ")");
         }
     }
 
@@ -45,25 +51,38 @@ class PaymentController extends Controller{
             ]);
 
             if ($tranx->data->status === 'success') {
-                if (!auth()->check() || !session()->has('meal_name')) {
+                if (!auth()->check() || !session()->has('meal_name') || !session()->has('meal_id')) {
                     return redirect('/meal')->with('error', 'An error occurred, please try again. Your session might have expired.');
                 }
 
-                Order::create([
+                $quantity = (int) session('meal_quantity', 1);
+                $price = (float) session('meal_price');
+                $user = auth()->user();
+
+                $orderData = [
                     'user_id' => auth()->id(),
-                    'name'    => auth()->user()->name,
-                    'food_name' => session('meal_name'),
-                    'quantity' => session('meal_quantity'),
-                    'price' => session('meal_price'),
-                    'total' => session('meal_price') * session('meal_quantity', 1),
+                    'total' => $price * $quantity,
+                    'total_price' => $price * $quantity,
                     'status' => 'paid',
-                    'address' => auth()->user()->address ?? 'Not Provided',
-                    'phone' => auth()->user()->phone ?? 'Not Provided',
+                    'address' => $user->address ?? 'Not Provided',
+                    'phone' => $user->phone ?? 'Not Provided',
+                ];
+
+                if (Schema::hasColumn('orders', 'name')) {
+                    $orderData['name'] = $user->name;
+                }
+
+                $order = Order::create($orderData);
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'food_id' => (int) session('meal_id'),
+                    'quantity' => $quantity,
+                    'price' => $price,
                 ]);
 
-                $user = auth()->user();
                 $meal = (object) ['name' => session('meal_name'), 'price' => session('meal_price')];
-                session()->forget(['meal_name', 'meal_price', 'meal_quantity']);
+                session()->forget(['meal_id', 'meal_name', 'meal_price', 'meal_quantity']);
                 return view('payment', compact('user', 'meal'));
             }
         } catch (\Exception $e) {
@@ -73,14 +92,18 @@ class PaymentController extends Controller{
         return redirect('/meal')->with('error', 'Payment failed.');
     }
 
-    public function process(Request $request) {
-        $user = Auth::user();
-        $amount = $request->amount;     
+    public function process(Request $request, $id)
+    {
+        $user = auth()->user();
+        $meal = Meal::findOrFail($id);
+    
         $payment = new Payment();
         $payment->user_id = $user->id;
-        $payment->amount = $amount;
+        $payment->meal_id = $meal->id;
+        $payment->amount = $meal->price;
         $payment->status = 'pending';
-        $payment->save();       
+        $payment->save();
+    
         return redirect()->back()->with('success', 'Payment initiated.');
     }
 
@@ -90,11 +113,6 @@ class PaymentController extends Controller{
             'payment' => $payment,
             'meal' => $payment->meal 
         ]);
-    }
-
-    // Payment.php model
-    public function meal(){
-        return $this->belongsTo(Meal::class);
     }
 
     public function store($id){

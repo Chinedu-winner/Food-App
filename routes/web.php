@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Food;
 use Illuminate\Support\Facades\Hash;
@@ -27,10 +28,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/test123', function () {
+    return 'Route is working';
+});
+
 Route::get('/food', function () {
     return view('food');
 })->middleware('auth')->name('food');
 
+Route::get('/admin/orders/{order}', [OrderController::class, 'show'])
+    ->name('admin.orders.show');
 
 Route::get('/login', function () {
     return view('login');
@@ -88,17 +95,16 @@ Route::get('orders/{order}/status', function($order) {
     return "Status of order:" . $order;
     })->middleware('auth')->name('orders.status');
 
-Route::get('/analytics/data', [AnalyticsController::class, 'data'])->middleware('auth');
-
-Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->middleware('auth')->name('analytics');
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+    ->name('admin.dashboard');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->name('dashboard');
 
-Route::post('/logout', 
-    [AuthenticatedSessionController::class, 'destroy'
-])->name('logout');
+    Route::get('/analytics/data', [AnalyticsController::class, 'data'])->middleware('auth');
+
+Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->middleware('auth')->name('analytics');
 
 Route::post('/login', function (Request $request) {
     $credentials = $request->validate([
@@ -153,68 +159,43 @@ Route::post('/meal',
     [MealController::class, 'store'
 ])->middleware('auth')->name('meal.store');
 
-Route::post('/pay', [PaymentController::class, 'process'])->name('pay');
+Route::post('/pay/{id}',
+    [PaymentController::class, 'process'
+])->name('pay');
 
 Route::get('/payment/callback', [PaymentController::class, 
     'handleCallback'
 ])->name('payment.callback');
 
-Route::get('/dashboard', function () {
-    return view('dashboard'); 
-})->middleware('auth')->name('dashboard');
-
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google'); 
 Route::get('login/google/callback', [SocialController::class, 'handleGoogleCallback'])->name('login.google.callback');
 
-
-Route::prefix('admin')->name('admin.')->group(function () {// Consolidated Admin Routes
-    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
-
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/access-logs', [AdminAccessLogController::class, 'index'])->name('access.logs');
-        Route::resource('food', FoodController::class);
-        Route::resource('categories', CategoryController::class);
-        Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
-        Route::get('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
-        Route::get('/orders/{order}/track', [App\Http\Controllers\Admin\OrderController::class, 'track'])->name('orders.track');
-        Route::delete('/orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'destroy'])->name('orders.destroy');
         Route::get('/users', [AdminDashboardController::class, 'users'])->name('users');
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+        Route::get('/orders/track/{order?}', [OrderController::class, 'track'])->name('orders.track');
+
+        Route::resource('foods', FoodController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('orders', OrderController::class);
     });
+
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('/create-admin-user', function () {
-    $admin = User::create([
-        'name' => 'Admin User',
-        'email' => 'admin@foodwin.com',
-        'password' => Hash::make('password123'),
-        'admin_id' => '12345',
-        'is_admin' => true,
-    ]);
-    return "Admin user created! Email: admin@foodwin.com, Password: password123, Admin ID: 12345";
-})->middleware(['auth', 'admin']);  
+Route::get('/admin/login', function () {
+    return view('admin.login');
+})->name('admin.login');
 
-Route::prefix('admin/foods')->name('admin.foods.')->group(function () {
-    Route::get('/', [FoodController::class, 'index'])->name('index');
-    Route::get('/create', [FoodController::class, 'create'])->name('create');
-    Route::post('/', [FoodController::class, 'store'])->name('store');
-    Route::get('/{food}/edit', [FoodController::class, 'edit'])->name('edit');
-    Route::put('/{food}', [FoodController::class, 'update'])->name('update');
-    Route::delete('/{food}', [FoodController::class, 'destroy'])->name('destroy');
-});
+Route::post('/admin/login',
+    [AdminAuthController::class, 'login'])
+->name('admin.login.submit');
 
 Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('order.place');
 Route::get('/order/success/{id}', [OrderController::class, 'success'])->name('order.success');
-
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {// Admin routes
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
-    Route::resource('food', FoodController::class, ['as' => 'admin']);
-    Route::resource('category', CategoryController::class, ['as' => 'admin']);
-    Route::resource('order', OrderController::class, ['as' => 'admin']);
-});
 
 Route::middleware('auth')->group(function() {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -223,24 +204,29 @@ Route::middleware('auth')->group(function() {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+
 Route::middleware(['auth'])->group(function () {
     Route::put('/user/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect()->route('login');
-})->name('logout.get');
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::resource('orders', OrderController::class);
+
+    Route::get('/orders/track/{order}', [OrderController::class, 'track'])
+        ->name('admin.orders.track');
+});
+
+Route::get('/admin/orders/track/{order}', [OrderController::class, 'track'])
+    ->name('admin.orders.track');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout.get');
 
 Route::middleware('auth')->prefix('settings')->name('settings.')->group(function () {
     Route::get('/', [SettingsController::class, 'index'])->name('index');
@@ -261,12 +247,12 @@ Route::middleware('auth')->prefix('settings')->name('settings.')->group(function
     Route::post('/email/send', [SettingsController::class, 'sendEmailVerification'])->name('email.send');
 });
 
-// Email verification routes (used by MustVerifyEmail)
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+Route::get('/email/verify/{id}/{hash}', 
+function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('dashboard');
 })->middleware(['auth', 'signed'])->name('verification.verify');
@@ -275,4 +261,30 @@ Route::fallback(function () {
     return Auth::check()
         ? redirect()->route('dashboard')
         : redirect()->route('login');
+});
+
+Route::get('/mail-test', function () {
+    Mail::raw('Test email from Laravel', function ($message) {
+        $message->to('chibundochinedu@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return "Mail sent!";
+});
+
+Route::get('/mail-form', function () {
+    return view('mail-form');
+});
+
+Route::post('/send-mail', function (Request $request) {
+
+    Mail::raw('Hello 👋 This is a test message from FoodWin!', function ($message) use ($request) {
+        $message->to($request->email)
+                ->subject('Welcome Email');
+    });
+    return "Email sent to " . $request->email;
+});
+
+Route::get('/csrf-test', function () {
+    return csrf_token();
 });

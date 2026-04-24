@@ -1,21 +1,23 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Activity;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
 use App\Models\Food;
 use App\Models\Category;
+use App\Models\Activity;
 
 class FoodController extends Controller{
     public function __construct(){
+        $this->middleware('auth');
         $this->middleware('admin');
     }
 
-    public function index() {
-        $foods = Food::with('category')->paginate(26);
-        $foodsByCategory = $foods->groupBy(function($food) {
+    public function index(){
+        $foods = Food::with('category')->paginate(10);
+
+        $foodsByCategory = $foods->groupBy(function ($food) {
             return $food->category ? $food->category->name : 'Uncategorized';
         });
 
@@ -24,6 +26,7 @@ class FoodController extends Controller{
 
     public function create(){
         $categories = Category::all();
+
         return view('admin.foods.create', compact('categories'));
     }
 
@@ -42,25 +45,26 @@ class FoodController extends Controller{
         }
 
         $food = Food::create($validated);
+
         Activity::create([
             'action' => 'added',
             'food_name' => $food->name,
-        ]); 
+        ]);
+
         return redirect()->route('admin.foods.index')
             ->with('success', 'Food created successfully.');
     }
 
     public function edit($id){
-        $food = \App\Models\Food::findOrFail($id);
+        $food = Food::findOrFail($id);
         $categories = Category::all();
 
-        // $this->authorize('update', $food); 
         return view('admin.foods.edit', compact('food', 'categories'));
     }
 
     public function update(Request $request, $id){
-        $food = \App\Models\Food::findOrFail($id);
-        
+        $food = Food::findOrFail($id);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -80,8 +84,7 @@ class FoodController extends Controller{
             ->with('success', 'Food updated successfully.');
     }
 
-    public function destroy(Food $food){ 
-        $this->authorize('delete', $food);
+    public function destroy(Food $food){
         $foodName = $food->name;
         $food->delete();
 
@@ -90,12 +93,14 @@ class FoodController extends Controller{
             'food_name' => $foodName,
         ]);
 
-        return redirect()->route('admin.foods.index')->with('success', 'Food deleted successfully.');
+        return redirect()->route('admin.foods.index')
+            ->with('success', 'Food deleted successfully.');
     }
 
     public function showMeal(){
-    $foods = Food::all(); // or paginate()
-    $categories = Category::all();
-    return view('Meal', compact('foods', 'categories'));
-}
+        $foods = Food::all();
+        $categories = Category::all();
+
+        return view('meal', compact('foods', 'categories'));
+    }
 }

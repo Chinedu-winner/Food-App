@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js" type="module"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -52,7 +53,7 @@
                         </svg>
                     </span>
                     <ul class="hidden group-hover:block absolute left-full top-0 bg-white text-gray-800 w-56 shadow-2xl rounded-lg overflow-hidden border border-gray-200 z-50">
-                        <li><a href="{{ route('admin.orders') }}" class="block px-4 py-3 hover:bg-gray-50 transition">All Orders</a></li>
+                        <li><a href="{{ route('orders.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">All Orders</a></li>
                         <li><a href="{{ route('admin.orders.track', 1) }}" class="block px-4 py-3 hover:bg-gray-50 transition">Track Order</a></li>
                     </ul>
                 </li>
@@ -71,8 +72,8 @@
                         <li><a href="{{ route('admin.foods.index') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Food List</a></li>
                         <li><a href="{{ route('admin.foods.create') }}" class="block px-4 py-3 hover:bg-gray-50 transition">Add Food</a></li>
                     </ul>
+                    
                 </li>
-
                 <li class="relative group">
                     <span class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer group">
                         <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

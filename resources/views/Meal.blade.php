@@ -97,21 +97,15 @@ $defaultImages = [
                         </p>
 
                         <a href="{{ route('pay', $food->id) }}" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors shadow-lg shadow-orange-200">Buy Now</a>
+                        <a href="{{ route('pay', $food->id) }}" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors shadow-lg shadow-orange-200">Order Now</a>
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center py-12">
-                    <p class="text-gray-500 text-lg">No meals available at the moment. Please check back later!</p>
-                </div>
-            @endforelse
+          @endforelse
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-</body>
-</html>
-          </div>
-        </div>
- <!-- 2. Pounded Yam & Egusi -->
+    <!-- 2. Pounded Yam & Egusi -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
           <img src="https://images.unsplash.com/photo-1627993427772-27712398516d?q=80&w=600&auto=format&fit=crop" alt="Pounded Yam and Egusi" class="w-full h-56 md:h-64 object-cover">
           <div class="p-6">
@@ -121,13 +115,10 @@ $defaultImages = [
               <span class="text-2xl font-bold text-bistro-price">$15.50</span>
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
-                  <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
-                </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
+                  <form action="{{ route('pay', ['id' => 1]) }}" method="POST">
+    @csrf
+    <button type="submit">Order Now</button>
+</form>
               </div>
             </div>
           </div>
@@ -142,14 +133,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$14.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>              
+                <form action="{{route ('pay', ['id' => 2])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -164,14 +151,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$13.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>             
+                <form action="{{route ('pay', ['id' => 3])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -187,14 +171,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$10.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>             
+                <form action="{{route ('pay', ['id' => 4])}}" method="GET" class="ml-4">
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -210,13 +191,10 @@ $defaultImages = [
               <span class="text-2xl font-bold text-bistro-price">$11.00</span>
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                <form action="{{route ('pay', ['id' => 5])}}" method="GET" class="ml-4">
+                  @crsf 
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -231,14 +209,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$5.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>              
+                <form action="{{route ('pay', ['id' => 6])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -253,14 +228,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$4.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.5</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.5</span>             
+                <form action="{{route ('pay', ['id' => 7])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -275,14 +247,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$16.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>              
+                <form action="{{route ('pay', ['id' => 8])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -297,14 +265,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$13.99</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>           
+                <form action="{{route ('pay', ['id' => 9])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -319,14 +284,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$15.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>             
+                <form action="{{route ('pay', ['id' => 10])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -340,14 +302,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$15.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>            
+                <form action="{{route ('pay', ['id' => 11])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -362,14 +321,11 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$12.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>          
+                <form action="{{route ('pay', ['id' => 12])}}" method="GET" class="ml-4">
+                  @crsf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -384,14 +340,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$12.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>              
+                <form action="{{route ('pay', ['id' => 13])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -406,14 +358,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$18.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>             
+                <form action="{{route ('pay', ['id' => 14])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -428,14 +376,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$20.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>             
+                <form action="{{route ('pay', ['id' => 15])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -450,14 +394,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$14.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>               
+                <form action="{{route ('pay', ['id' => 16])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -472,14 +412,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$14.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>          
+                <form action="{{route ('pay', ['id' => 17])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -494,14 +430,10 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$9.00</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>           
+                <form action="{{route ('pay', ['id' => 18])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
@@ -515,25 +447,19 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$16.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>
-                @if($food)
-                <form action="{{route ('pay', ['id' => $food->id])}}" method="GET" class="ml-4">
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>               
+                <form action="{{route ('pay', ['id' => 19])}}" method="GET" class="ml-4">
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
-                @else
-                <span class="ml-4 text-red-500">No meals available</span>
-                @endif
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  </div>
-
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
     <footer class="mt-24 pt-10 border-t border-gray-300 text-center text-gray-600 text-sm">Prices are in USD • All ratings based on customer reviews • Menu updated February 2026</footer>
   </div>
-
 </body>
 </html>
 <script>

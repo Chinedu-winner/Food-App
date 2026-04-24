@@ -13,12 +13,7 @@
         @method('patch')
 
         <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-            <img
-                id="profile-photo-preview"
-                src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
-                class="w-20 h-20 rounded-full object-cover border-2 border-slate-300"
-                alt="Profile photo preview"
-            >
+            <img id="profile-photo-preview" src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}" class="w-20 h-20 rounded-full object-cover border-2 border-slate-300" alt="Profile photo preview">
             <div class="flex-1">
                 <x-input-label for="profile_photo" :value="__('Profile Picture')" />
                 <input id="profile-photo-input" name="profile_photo" type="file" accept="image/*" class="mt-2 block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border file:border-gray-300 file:bg-white file:px-3 file:py-2 file:text-gray-700 hover:file:bg-gray-100">

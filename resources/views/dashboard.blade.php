@@ -32,11 +32,6 @@
     </li>
   
   <ul class="space-y-3 flex-1">
-
-    <!-- Other menu items -->
-    <li class="px-4 py-2 rounded-lg text-white hover:bg-gray-50 hover:bg-opacity-20 flex items-center gap-2 cursor-pointer transition-all duration-200">
-        <a href="{{ route('order') }}" class="flex items-center gap-2 text-white hover:text-white">🛒 Orders</a>
-    </li>
     <li class="px-4 py-2 rounded-lg text-white hover:bg-gray-50 hover:bg-opacity-20 flex items-center gap-2 cursor-pointer transition-all duration-200">
       <a href="{{ route('settings.index') }}" class="flex items-center gap-2 text-white hover:text-white">🔒 Settings</a>
     </li>
@@ -122,11 +117,8 @@
     <div class="bg-gradient-to-r from-red-400 to-red-600 rounded-xl p-8 text-white text-center shadow-lg hover:shadow-xl transition-shadow bg-cover bg-center" style="background-image: linear-gradient(rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9)), url('https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=800&h=200&fit=crop&auto=format')">
     <h3 class="text-2xl font-bold mb-4">Hungry? Order Now!</h3>
     <p class="text-lg mb-6 opacity-90">Get delicious food delivered to your doorstep</p>
-    <button class="bg-gray-50 text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
-    <a href="{{ route('meal.index') }}" class="block">🍕 Order Now</a>
-    </button>
-</div>
-
+    <button class="bg-gray-50 text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-md hover:shadow-lg transform hover:scale-105"><a href="{{ route('meal.index') }}" class="block">🍕 Order Now</a></button>
+</div> 
 </div> 
 
 <script>

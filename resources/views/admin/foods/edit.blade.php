@@ -5,7 +5,7 @@
 @section('content')
 <h1 class="text-2xl font-bold mb-4">Edit Food</h1>
 
-<form action="{{ route('admin.food.update', $food->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.foods.update', $food->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 

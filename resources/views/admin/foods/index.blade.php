@@ -16,9 +16,9 @@
     }
 </style>
 
-<div class="flex justify-between items-center mb-6">in
+<div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold" style="color: var(--bistro-title);">Food List</h1>
-    <a href="{{ route('admin.food.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium">+ Add New Food</a>
+    <a href="{{ route('admin.foods.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium">+ Add New Food</a>
 </div>
 
 <div class="mb-12" style="background-color: rgb(233,226,207)" class="rounded-lg shadow">
@@ -40,8 +40,8 @@
                 <td class="px-6 py-4 text-gray-600">{{ $food->category->name ?? 'N/A' }}</td>
                 <td class="px-6 py-4 font-bold" style="color: var(--bistro-price);">${{ number_format($food->price, 2) }}</td>
                 <td class="px-6 py-4 text-sm flex gap-2">
-                    <a href="{{ route('admin.food.edit', $food->id) }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Edit</a>
-                    <form action="{{ route('admin.food.destroy', $food->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
+                    <a href="{{ route('admin.foods.edit', $food->id) }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Edit</a>
+                    <form action="{{ route('admin.foods.destroy', $food->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition">Delete</button>
@@ -77,8 +77,8 @@
                 <div class="flex items-center justify-between">
                     <span class="text-2xl font-bold" style="color: var(--bistro-price);">${{ number_format($food->price, 2) }}</span>
                     <div class="flex gap-2">
-                        <a href="{{ route('admin.food.edit', $food->id) }}" class="px-3 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
-                        <form action="{{ route('admin.food.destroy', $food->id) }}" method="POST" onsubmit="return confirm('Delete this food?');" class="inline">
+                        <a href="{{ route('admin.foods.edit', $food->id) }}" class="px-3 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">Edit</a>
+                        <form action="{{ route('admin.foods.destroy', $food->id) }}" method="POST" onsubmit="return confirm('Delete this food?');" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="px-3 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors">Delete</button>
@@ -90,7 +90,7 @@
     @empty
         <div class="col-span-full text-center py-12">
             <p class="text-gray-500 text-lg mb-4">No foods found. Let's add some!</p>
-            <a href="{{ route('admin.food.create') }}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Add First Food</a>
+            <a href="{{ route('admin.foods.create') }}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Add First Food</a>
         </div>
     @endforelse
 </div>

@@ -1,17 +1,17 @@
 @extends('admin.admin')
 
-@section('page-title')
+@section('page-title', 'Add New Food')
 
 @section('content')
 <h1 class="text-2xl font-bold mb-4">Add New Food</h1>
 
-<form action="{{ route('admin.food.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.foods.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label class="block mb-2">Name</label>
     <input type="text" name="name" class="border p-2 w-full mb-4" required>
 
     <label class="block mb-2">Category</label>
-   <select name="category_id" class="border p-2 w-full mb-4">
+    <select name="category_id" class="border p-2 w-full mb-4">
     <option value="1">Jollof Rice</option>
     <option value="2">Pounded Yam & Egusi Soup</option>
     <option value="3">Fried Rice</option>
