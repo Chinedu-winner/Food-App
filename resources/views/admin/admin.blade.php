@@ -114,40 +114,64 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 flex flex-col overflow-hidden main-bg">
-        <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b border-gray-200">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">@yield('page-title')</h1>
-                <p class="text-sm text-gray-600 mt-1">Welcome back, {{ auth()->user()->name ?? 'Admin' }}</p>
-            </div>
-            <div x-data="{ open: false }" class="relative">
-                <!-- Avatar Button -->
-                <button @click="open = !open" class="focus:outline-none">
-                    <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" class="w-10 h-10 rounded-full object-cover border-2 border-gray-300">
-                </button>
 
-                <!-- Dropdown -->
-                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50" style="display: none;">
-                    <div class="px-4 py-2 border-b">
-                        <p class="text-sm font-semibold">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
-                    </div>
-                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">Profile</a>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="text-red-500 hover:text-red-700">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </header>
+<div x-data="{ open: false }" class="relative h-full flex flex-col">
 
-        <section class="flex-1 p-6 overflow-y-auto">
-            <div class="bg-white rounded-xl card-shadow p-6">
-                @yield('content')
-            </div>
-        </section>
-    </main>
-    @stack('scripts')
+<header class="bg-white px-6 py-4 flex justify-between items-center border-b">
+    <h1 class="text-lg font-semibold text-gray-800">@yield('page-title')</h1>
+
+    <button @click="open = true">
+        <img 
+        src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" 
+        class="w-10 h-10 rounded-full border shadow-sm hover:scale-105 transition">
+    </button>
+</header>
+
+<div x-show="open" x-transition.opacity class="fixed inset-0 bg-black/40 z-40" @click="open = false"></div>
+
+<div x-show="open" x-transition:enter="transform transition ease-in-out duration-500" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition ease-in-out duration-400" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="fixed top-0 right-0 h-full w-full sm:w-[380px]  bg-white shadow-2xl z-50 flex flex-col">
+
+    <div class="bg-gray-100 px-6 py-5 border-b flex justify-between items-center">
+        <h2 class="text-lg font-semibold">Google Account</h2>
+        <button @click="open = false" class="text-gray-500 hover:text-gray-800 text-xl">✕</button>
+    </div>
+
+    <div class="flex flex-col items-center text-center px-6 py-8">
+        <img src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name) }}" class="w-24 h-24 rounded-full shadow-md mb-4">
+
+        <h3 class="text-lg font-semibold text-gray-900">{{ auth()->user()->name }}</h3>
+
+        <p class="text-sm text-gray-500">{{ auth()->user()->email }}</p>
+
+        <a href="{{ route('profile.edit') }}" class="mt-4 px-5 py-2 border rounded-full text-sm hover:bg-gray-100 transition"> Manage your account</a>
+    </div>
+
+    <div class="border-t"></div>
+
+    <div class="flex-1 py-4">
+        <a href="{{ route('profile.edit') }}"class="block px-8 py-3 text-gray-700 hover:bg-gray-100">Profile Settings</a>
+        <a href="#"class="block px-8 py-3 text-gray-700 hover:bg-gray-100">Help</a>
+
+    </div>
+    <div class="border-t p-6">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg transition">Sign out</button>
+        </form>
+    </div>
+
+</div> {{-- closes Gmail panel --}}
+
+<section class="flex-1 p-6 overflow-y-auto">
+    <div class="bg-white rounded-xl card-shadow p-6">
+        @yield('content')
+    </div>
+</section>
+
+</div> {{-- closes x-data div --}}
+</main> {{-- only ONE closing main --}}
+
+@stack('scripts')
 </body>
 </html>

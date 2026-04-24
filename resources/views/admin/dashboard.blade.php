@@ -269,7 +269,7 @@
                     <h3 class="text-lg font-semibold text-gray-900">View Orders</h3>
                     <p class="text-gray-600 text-sm">Manage customer orders</p>
                 </div>
-            </div>
+            </div> 
         </a>
     </div>
 @endsection
