@@ -13,8 +13,6 @@
 
     <h2 class="text-3xl font-bold mb-2 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Create Account</h2>
     <p class="text-center text-gray-500 mb-6 text-sm">Join us and start ordering delicious meals 🍽️</p>
-
-    <!-- Error message -->
     @if($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 p-3 mb-4 rounded-lg text-sm">
             {{ $errors->first() }}
@@ -35,16 +33,16 @@
         <input name="email" type="email" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition">
     </div>
 
-    <div style="position: relative;">
+    <div style="position: relative; margin-bottom: 1rem;">
         <label for="password" class="block text-gray-700 font-medium mb-1">Password</label>
         <input id="password" name="password" placeholder="password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-        <button type="button" onclick="togglePassword()" style="position: absolute; right: 10px; top: 38px;">👁</button>
+        <button type="button" onclick="togglePassword('password')" style="position: absolute; right: 10px; top: 38px; background: none; border: none; cursor: pointer; font-size: 20px;">👁️</button>
     </div>
 
-    <div style="position: relative;">
+    <div style="position: relative; margin-bottom: 1rem;">
         <label for="password_confirmation" class="block text-gray-700 font-medium mb-1">Confirm Password</label>
         <input id="password_confirmation" name="password_confirmation" placeholder="password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-        <button type="button" onclick="togglePassword()" style="position: absolute; right: 10px; top: 38px;">👁</button>
+        <button type="button" onclick="togglePassword('password_confirmation')" style="position: absolute; right: 10px; top: 38px; background: none; border: none; cursor: pointer; font-size: 20px;">👁️</button>
     </div>
 
     <button type="submit" class="w-full bg-gradient-to-r mt-4 from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Register</button>
@@ -56,16 +54,20 @@
 
 </div>
 
-</body>
-</html>
 <script>
-function togglePassword() {
-    const passwordInput = document.getElementById("password");
-
-    if (passwordInput.type === "password") {
-    passwordInput.type = "text";
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    const button = event.target;
+    
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "🙈";
     } else {
-    passwordInput.type = "password";
+        input.type = "password";
+        button.textContent = "👁️"; 
     }
 }
 </script>
+
+</body>
+</html>

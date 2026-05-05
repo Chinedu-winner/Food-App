@@ -41,7 +41,7 @@ Route::get('/admin/orders/{order}', [OrderController::class, 'show'])
 
 Route::get('/login', function () {
     return view('login');
-})->name('login');
+})->middleware('guest')->name('login');
 
 Route::get('/pay/{id}', 
     [PaymentController::class, 'redirectToGateway'
@@ -95,14 +95,9 @@ Route::get('orders/{order}/status', function($order) {
     return "Status of order:" . $order;
     })->middleware('auth')->name('orders.status');
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
-    ->name('admin.dashboard');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-    Route::get('/analytics/data', [AnalyticsController::class, 'data'])->middleware('auth');
+Route::get('/analytics/data', 
+    [AnalyticsController::class, 'data'
+])->middleware('auth');
 
 Route::get('/dashboard/analytics', [AnalyticsController::class, 'index'])->middleware('auth')->name('analytics');
 
@@ -122,10 +117,6 @@ Route::post('/login', function (Request $request) {
 })->middleware('guest')->name('login.submit');
 
 Route::get('/register', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-
     return view('register');
 })->middleware('guest')->name('register');
 
@@ -147,8 +138,8 @@ Route::post('/register', function(Request $request) {
     ]);
 
     Auth::login($user);
-
-    return redirect()->route('dashboard');
+    return redirect()->route('dashboard')
+        ->with('success', 'Registration successful!');
 })->middleware('guest')->name('register.submit');
 
 Route::get('/meal', 
@@ -159,9 +150,9 @@ Route::post('/meal',
     [MealController::class, 'store'
 ])->middleware('auth')->name('meal.store');
 
-Route::post('/pay/{id}',
-    [PaymentController::class, 'process'
-])->name('pay');
+Route::get('/pay/{id}', 
+    [PaymentController::class, 'redirectToGateway'
+])->middleware('auth')->name('pay');
 
 Route::get('/payment/callback', [PaymentController::class, 
     'handleCallback'
@@ -170,6 +161,10 @@ Route::get('/payment/callback', [PaymentController::class,
 Route::get('login/google', [SocialController::class, 'redirectToGoogle'])->name('login.google'); 
 Route::get('login/google/callback', [SocialController::class, 'handleGoogleCallback'])->name('login.google.callback');
 
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
@@ -177,6 +172,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminDashboardController::class, 'users'])->name('users');
         Route::get('/orders', [OrderController::class, 'index'])->name('orders');
         Route::get('/orders/track/{order?}', [OrderController::class, 'track'])->name('orders.track');
+
+        Route::get('/management', [AdminAuthController::class, 'showManagement'])->name('management');
+        Route::post('/management', [AdminAuthController::class, 'store'])->name('store');
+        Route::delete('/management/{id}', [AdminAuthController::class, 'destroy'])->name('destroy');
 
         Route::resource('foods', FoodController::class);
         Route::resource('categories', CategoryController::class);
@@ -196,6 +195,9 @@ Route::post('/admin/login',
 
 Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('order.place');
 Route::get('/order/success/{id}', [OrderController::class, 'success'])->name('order.success');
+
+Route::get('/admin/edit-id/{id}', [AdminController::class, 'editId'])
+    ->name('admin.edit.id');
 
 Route::middleware('auth')->group(function() {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -226,7 +228,6 @@ Route::get('/admin/orders/track/{order}', [OrderController::class, 'track'])
     ->name('admin.orders.track');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout.get');
 
 Route::middleware('auth')->prefix('settings')->name('settings.')->group(function () {
     Route::get('/', [SettingsController::class, 'index'])->name('index');
@@ -257,11 +258,6 @@ function (EmailVerificationRequest $request) {
     return redirect()->route('dashboard');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::fallback(function () {
-    return Auth::check()
-        ? redirect()->route('dashboard')
-        : redirect()->route('login');
-});
 
 Route::get('/mail-test', function () {
     Mail::raw('Test email from Laravel', function ($message) {
@@ -285,6 +281,22 @@ Route::post('/send-mail', function (Request $request) {
     return "Email sent to " . $request->email;
 });
 
-Route::get('/csrf-test', function () {
-    return csrf_token();
-});
+Route::get('/admin/{id}/edit-id',  
+    [AdminAuthController::class, 'editAdminId'])
+->name('admin.edit.id');
+
+Route::post('/admin/{id}/update-id',
+    [AdminAuthController::class, 'updateAdminId'])
+->name('admin.update.id');
+
+Route::post('/admin/{id}/generate-id', [AdminController::class, 'generateId'])
+    ->name('admin.generate.id');
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');

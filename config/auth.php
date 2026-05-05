@@ -67,17 +67,18 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
+
         'admins' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Admin::class),
+            'model' => App\Models\Admin::class,
         ],
+    ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -99,20 +100,12 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
         'admins' => [
-            'provider' => 'admins',         
+            'provider' => 'admins',
             'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
         ],
     ],
-    
+        
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout

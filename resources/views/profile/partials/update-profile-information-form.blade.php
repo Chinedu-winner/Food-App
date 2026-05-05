@@ -93,11 +93,7 @@
                 @endphp
                 @foreach($availablePreferences as $preference)
                     <label class="inline-flex items-center">
-                        <input type="checkbox"
-                               name="preferences[]"
-                               value="{{ $preference }}"
-                               {{ in_array($preference, $preferences) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-gray-700 shadow-sm focus:ring-gray-400">
+                        <input type="checkbox" name="preferences[]" value="{{ $preference }}" {{ in_array($preference, $preferences) ? 'checked' : '' }} class="rounded border-gray-300 text-gray-700 shadow-sm focus:ring-gray-400">
                         <span class="ml-2 text-sm text-gray-700">{{ $preference }}</span>
                     </label>
                 @endforeach

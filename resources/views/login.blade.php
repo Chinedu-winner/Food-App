@@ -43,7 +43,7 @@
         <label class="flex items-center gap-2">
         <input type="checkbox" name="remember" class="h-4 w-4">Remember me</label>
         <a href="#" class="hover:text-teal-500">Forgot password?</a>
-    </div>
+    </div> 
     <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg transition"> Sign In </button>
     </form>
 
@@ -61,14 +61,16 @@
 </div>
 </body>
 </html>
-
 <script>
-function togglePassword() {
-    const passwordInput = document.getElementById("password");
+document.addEventListener("DOMContentLoaded", function () {
+    window.togglePassword = function () {
+        const passwordInput = document.getElementById("password");
 
-    if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    } else {
-    passwordInput.type = "password";
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
     }
-}
+});
+</script>

@@ -29,11 +29,7 @@
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
-                                    <img
-                                        src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
-                                        class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
-                                        alt="Profile photo"
-                                    >
+                                    <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}" class="w-12 h-12 rounded-full object-cover border-2 border-gray-200" alt="Profile photo">
                                 </div>
                                 <div class="ml-4">
                                     <h3 class="text-xl font-semibold text-gray-900">{{ $user->name }}</h3>

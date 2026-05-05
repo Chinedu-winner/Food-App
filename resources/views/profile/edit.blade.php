@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        @include('profile.partials.delete-user-form')
+                        @include('profile.partials.delete-user-form') 
                     </div>
                 </div>
             </div>

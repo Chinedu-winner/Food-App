@@ -11,17 +11,18 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder{
     use WithoutModelEvents;
     public function run(): void{
-        // Create categories first
+        $this->call([
+        CategorySeeder::class,
+        FoodSeeder::class,
+    ]);
         Category::firstOrCreate(['name' => 'Nigerian']);
         Category::firstOrCreate(['name' => 'International']);
 
-        // Create test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
-        // Seed meals using the FoodSeeder
         $this->call(FoodSeeder::class);
         Meal::create(['name' => 'Grilled Salmon', 'price' => 22.99]);
         Meal::create(['name' => 'Creamy Mushroom Pasta', 'price' => 18.99]);

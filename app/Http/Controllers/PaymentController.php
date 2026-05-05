@@ -63,7 +63,7 @@ class PaymentController extends Controller{
                     'user_id' => auth()->id(),
                     'total' => $price * $quantity,
                     'total_price' => $price * $quantity,
-                    'status' => 'paid',
+                    'status' => 'pending',
                     'address' => $user->address ?? 'Not Provided',
                     'phone' => $user->phone ?? 'Not Provided',
                 ];
@@ -92,8 +92,7 @@ class PaymentController extends Controller{
         return redirect('/meal')->with('error', 'Payment failed.');
     }
 
-    public function process(Request $request, $id)
-    {
+    public function process(Request $request, $id){
         $user = auth()->user();
         $meal = Meal::findOrFail($id);
     

@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <title>Admin Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Login</title>
 </head>
 <body class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1470&q=80');">
-
+    @if($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+        @foreach($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+    @endif
     <div class="bg-white/90 p-8 rounded-2xl shadow-lg max-w-md w-full">
         <h2 class="text-3xl font-bold text-orange-600 mb-6 text-center">Admin Login</h2>
         <span class="text-gray-700 font-medium">Hello, {{ Auth::check() ? Auth::user()->name : 'Guest' }}, Welcome to FoodWin, where your request is our maximum satisfaction. </span>

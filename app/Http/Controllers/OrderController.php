@@ -44,9 +44,29 @@ class OrderController extends Controller{
         return view('order', compact('orders'));
     }
 
-    public function track(Order $order){
-        return view('admin.orders.track', ['order' => $order]);
+  public function track(Request $request){
+    // Show empty form on GET
+    if ($request->isMethod('get')) {
+        return view('track');
     }
+
+    // Validate on POST
+    $request->validate([
+        'order_id' => 'required|numeric',
+    ]);
+
+    $order = Order::where('id', $request->order_id)
+                  ->where('user_id', Auth::id())
+                  ->first();
+
+    if (!$order) {
+        return back()->withErrors([
+            'order_id' => 'Order not found or does not belong to you.'
+        ]);
+    }
+
+    return view('track', compact('order'));
+}
 
     public function status(Order $order): JsonResponse{
         if (Auth::id() !== $order->user_id) {

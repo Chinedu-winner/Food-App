@@ -8,8 +8,7 @@ use App\Models\Food;
 use App\Models\Category;
 
 class FoodSeeder extends Seeder{
-    public function run(): void{
-        // Get or create categories
+    public function run(): void{ // Get or create categories
         $nigerianCategory = Category::firstOrCreate(
             ['name' => 'Nigerian'],
             ['slug' => 'nigerian', 'description' => 'Traditional Nigerian cuisine']
@@ -19,8 +18,7 @@ class FoodSeeder extends Seeder{
             ['slug' => 'international', 'description' => 'International cuisine from around the world']
         );
 
-        $foods = [
-            // Nigerian Foods
+        $foods = [ // Nigerian Foods
             ['name' => 'Smoky Jollof Rice', 'category_id' => $nigerianCategory->id, 'price' => 12.99, 'description' => 'Classic party Jollof rice served with fried plantain and grilled chicken.'],
             ['name' => 'Pounded Yam & Egusi', 'category_id' => $nigerianCategory->id, 'price' => 15.50, 'description' => 'Soft pounded yam paired with rich Egusi soup and assorted meat.'],
             ['name' => 'Amala & Ewedu', 'category_id' => $nigerianCategory->id, 'price' => 14.00, 'description' => 'Fluffy yam flour dough served with Ewedu leaf soup and Gbegiri.'],

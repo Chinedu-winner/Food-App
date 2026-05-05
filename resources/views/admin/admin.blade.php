@@ -41,6 +41,14 @@
                         Dashboard   
                     </a>
                 </li>
+            <li>
+        <a href="{{ route('admin.management') }}" class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 group">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        Admin Management
+    </a>
+</li>
 
                 <li class="relative group">
                     <span class="flex items-center px-4 py-3 rounded-lg hover:bg-white/10 transition-all duration-200 cursor-pointer group">
@@ -123,7 +131,7 @@
 
     <button @click="open = true">
         <img 
-        src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}" 
+        src="{{ auth()->user()->profile_photo ? asset('storage/' . auth()->user()->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"  
         class="w-10 h-10 rounded-full border shadow-sm hover:scale-105 transition">
     </button>
 </header>

@@ -31,16 +31,40 @@ class AdminDashboardController extends Controller{
     ));   
 }
 
+
+public function generateId($id){
+    $admin = User::findOrFail($id);
+
+    if ($admin->admin_id) {
+        return back()->with('error', 'Admin ID already exists.');
+    }
+
+    // Generate unique Admin ID
+    do {
+        $generatedId = 'ADM-' . strtoupper(Str::random(6));
+    } while (User::where('admin_id', $generatedId)->exists());
+
+    $admin->admin_id = $generatedId;
+    $admin->save();
+
+    return back()->with('success', 'Admin ID generated successfully.');
+}
+
     public function users(){ //for the admin to view all users
         $users = User::all();
         return view('admin.user', compact('users'));
     }
 
-public function index(){
-    $totalFoods = Food::count();
-    $user = auth()->user();
-    $latestFoods = Food::latest()->take(5)->get();
+    public function index(){
+        $totalFoods = Food::count();
+        $user = auth()->user();
+        $latestFoods = Food::latest()->take(5)->get();
 
-    return view('admin.dashboard', compact('totalFoods', 'latestFoods'));
+        return view('admin.dashboard', compact('totalFoods', 'latestFoods'));
+    }
+
+    public function editId($id){
+        $admin = User::findOrFail($id);
+        return view('admin.edit_admin_id', compact('admin'));
     }
 }

@@ -10,32 +10,31 @@
 <body class="bg-gray-50 font-sans antialiased">
 @php
 $foodImageMap = [
-    'Smoky Jollof Rice' => 'https://images.unsplash.com/photo-1593629238745-de3d90f491a5?q=80&w=600&auto=format&fit=crop',
-    'Pounded Yam & Egusi' => 'https://images.unsplash.com/photo-1627993427772-27712398516d?q=80&w=600&auto=format&fit=crop',
-    'Amala & Ewedu' => 'https://images.unsplash.com/photo-1629845774847-063851b9e591?q=80&w=600&auto=format&fit=crop',
-    'Efo Riro' => 'https://images.unsplash.com/photo-1543363363-2395a123df65?q=80&w=600&auto=format&fit=crop',
-    'Suya' => 'https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=600&auto=format&fit=crop',
-    'Pepper Soup' => 'https://images.unsplash.com/photo-1604152135912-04a022e23696?q=80&w=600&auto=format&fit=crop',
-    'Moi Moi' => 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=600&auto=format&fit=crop',
-    'Akara' => 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?q=80&w=600&auto=format&fit=crop',
-    'Banga Soup' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&auto=format&fit=crop',
-    'Ofada Rice' => 'https://images.unsplash.com/photo-1596236906666-b3281c85304b?q=80&w=600&auto=format&fit=crop',
-    'Afang Soup' => 'https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=600&auto=format&fit=crop',
-    'Edikang Ikong' => 'https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=600&auto=format&fit=crop',
-    'Tuwo Shinkafa' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop',
-    'Kilishi' => 'https://images.unsplash.com/photo-1613476435017-9159518d8442?q=80&w=600&auto=format&fit=crop',
-    'Nkwobi' => 'https://images.unsplash.com/photo-1606787366850-de6330128bfbc?q=80&w=600&auto=format&fit=crop',
-    'Isi Ewu' => 'https://images.unsplash.com/photo-1574484284002-952d92456975?q=80&w=600&auto=format&fit=crop',
-    'Oha Soup' => 'https://images.unsplash.com/photo-1543362906-ac1b481287f1?q=80&w=600&auto=format&fit=crop',
-    'Bitterleaf Soup' => 'https://images.unsplash.com/photo-1627993427772-27712398516d?q=80&w=600&auto=format&fit=crop',
-    'Abacha' => 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?q=80&w=600&auto=format&fit=crop',
-    'Ukwa' => 'https://images.unsplash.com/photo-1604329760661-e71dc70844f3?q=80&w=600&auto=format&fit=crop',
-    'Creamy Mushroom Pasta' => 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?q=80&w=600&auto=format&fit=crop',
-    'Grilled Fish Tacos' => 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=600&auto=format&fit=crop',
-    'Beef Steak Frites' => 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=600&auto=format&fit=crop',
-    'Thai Green Curry' => 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?q=80&w=600&auto=format&fit=crop',
-    'Shanghai Fried Rice' => 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=600&auto=format&fit=crop',
-    'Margherita Pizza' => 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=600&auto=format&fit=crop',
+    'Smoky Jollof Rice'      => 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600',
+    'Pounded Yam & Egusi'    => 'https://images.unsplash.com/photo-1627993427772-27712398516d?w=600',
+    'Amala & Ewedu'          => 'https://images.unsplash.com/photo-1629845774847-063851b9e591?w=600',
+    'Efo Riro'               => 'https://images.unsplash.com/photo-1543363363-2395a123df65?w=600',
+    'Beef Suya'              => 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600',
+    'Goat Meat Pepper Soup'  => 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=600',
+    'Moi Moi'                => 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600',
+    'Akara'                  => 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?w=600',
+    'Banga Soup & Starch'    => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+    'Ofada Rice & Sauce'     => 'https://images.unsplash.com/photo-1596236906666-b3281c85304b?w=600',
+    'Afang Soup'             => 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600',
+    'Edikang Ikong'          => 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600',
+    'Tuwo Shinkafa'          => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600',
+    'Kilishi'                => 'https://images.unsplash.com/photo-1613476435017-9159518d8442?w=600',
+    'Nkwobi'                 => 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600',
+    'Oha Soup'               => 'https://images.unsplash.com/photo-1543362906-ac1b481287f1?w=600',
+    'Bitterleaf Soup'        => 'https://images.unsplash.com/photo-1627993427772-27712398516d?w=600',
+    'Abacha (African Salad)' => 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=600',
+    'Ukwa'                   => 'https://images.unsplash.com/photo-1604329760661-e71dc70844f3?w=600',
+    'Creamy Mushroom Pasta'  => 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600',
+    'Grilled Fish Tacos'     => 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600',
+    'Beef Steak Frites'      => 'https://images.unsplash.com/photo-1558030006-450675393462?w=600',
+    'Thai Green Curry'       => 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=600',
+    'Shanghai Fried Rice'    => 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600',
+    'Margherita Pizza'       => 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600',
 ];
 
 $defaultImages = [
@@ -96,7 +95,6 @@ $defaultImages = [
                             {{ \Illuminate\Support\Str::limit($food->description ?? 'No description provided.', 100) }}
                         </p>
 
-                        <a href="{{ route('pay', $food->id) }}" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors shadow-lg shadow-orange-200">Buy Now</a>
                         <a href="{{ route('pay', $food->id) }}" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors shadow-lg shadow-orange-200">Order Now</a>
                     </div>
                 </div>
@@ -113,12 +111,9 @@ $defaultImages = [
             <p class="text-gray-600 mb-6 min-h-[3rem]">Soft pounded yam paired with rich Egusi soup and assorted meat.</p>
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$15.50</span>
-              <div class="text-xl text-bistro-star flex items-center">
-                ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>
-                  <form action="{{ route('pay', ['id' => 1]) }}" method="POST">
-    @csrf
-    <button type="submit">Order Now</button>
-</form>
+              <div class="text-xl text-bistro-star flex items-center">★★★★★
+                <span class="text-gray-400 text-lg ml-2">4.9</span>
+                  <a href="{{ route('pay', 1) }}" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600">Order Now</a>
               </div>
             </div>
           </div>
@@ -153,7 +148,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>             
                 <form action="{{route ('pay', ['id' => 3])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -192,7 +187,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>
                 <form action="{{route ('pay', ['id' => 5])}}" method="GET" class="ml-4">
-                  @crsf 
+                  @csrf 
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -211,7 +206,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>              
                 <form action="{{route ('pay', ['id' => 6])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -230,7 +225,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.5</span>             
                 <form action="{{route ('pay', ['id' => 7])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -267,7 +262,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.7</span>           
                 <form action="{{route ('pay', ['id' => 9])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -286,7 +281,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★★ <span class="text-gray-400 text-lg ml-2">4.8</span>             
                 <form action="{{route ('pay', ['id' => 10])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -304,7 +299,7 @@ $defaultImages = [
               <div class="text-xl text-bistro-star flex items-center">
                 ★★★★★ <span class="text-gray-400 text-lg ml-2">4.9</span>            
                 <form action="{{route ('pay', ['id' => 11])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -321,9 +316,9 @@ $defaultImages = [
             <div class="flex items-center justify-between">
               <span class="text-2xl font-bold text-bistro-price">$12.50</span>
               <div class="text-xl text-bistro-star flex items-center">
-                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>          
+                ★★★★☆ <span class="text-gray-400 text-lg ml-2">4.6</span>           
                 <form action="{{route ('pay', ['id' => 12])}}" method="GET" class="ml-4">
-                  @crsf
+                  @csrf
                   <button type="submit" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Order Now</button>
                 </form>
               </div>
@@ -462,14 +457,3 @@ $defaultImages = [
   </div>
 </body>
 </html>
-<script>
-  const colors = ['bg-red-500',
-    'bg-blue-500', 'bg-green-500',
-    'bg-yellow-500',];
-  function randomBg(){
-    const box = document.getElementById('box'); 
-    const random = colors[Math.floor(Math.random() * colors.length)];
-    box.className = "w-full h-40 " + random;
-  }
-  setInterval(randomBg, 4000); 
-</script>

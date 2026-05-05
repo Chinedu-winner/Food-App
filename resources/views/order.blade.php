@@ -74,6 +74,7 @@
                         <thead>
                             <tr class="text-sm text-gray-500">
                                 <th class="py-2">Order ID</th>
+                                <th class="py-2">Name</th>
                                 <th class="py-2">Status</th>
                                 <th class="py-2">Total</th>
                                 <th class="py-2">Created</th>
@@ -82,7 +83,8 @@
                         <tbody>
                             @forelse(($orders ?? collect()) as $order)
                                 <tr class="bg-gray-50 shadow-sm rounded-lg">
-                                    <td class="py-3 px-2 font-medium">#{{ $order->id }}</td>
+                                    <td class="py-3 px-2 font-medium">{{ $order->id }}</td>
+                                    <td class="py-3 px-2 font-medium">{{ $order->name }}</td>
                                     <td class="py-3 px-2 capitalize">{{ $order->status }}</td>
                                     <td class="py-3 px-2">${{ number_format((float) ($order->total ?? $order->total_price ?? 0), 2) }}</td>
                                     <td class="py-3 px-2">{{ optional($order->created_at)->format('M d, Y h:i A') }}</td>

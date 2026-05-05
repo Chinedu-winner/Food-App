@@ -73,7 +73,6 @@ class Order extends Model{
         return $query->orderByDesc('created_at');
     }
 
-    // Calculate total from items
     public function recalcTotal(): float{
         $total = $this->orderItems()->get()->reduce(function ($carry, OrderItem $item) {
             return $carry + ($item->price * $item->quantity);

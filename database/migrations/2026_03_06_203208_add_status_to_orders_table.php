@@ -13,11 +13,12 @@ return new class extends Migration {
         });
     }
 
-    public function down(): void {
-    Schema::table('orders', function (Blueprint $table) {
-    if (!Schema::hasColumn('orders', 'status')) {
-        $table->enum('status', ['pending','processing','completed','canceled'])->default('pending');
+    public function down(){
+        if (!Schema::hasTable('orders')) {
+            return; 
         }
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 };
