@@ -24,13 +24,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
-Route::get('/test123', function () {
-    return 'Route is working';
-});
+Route::get('/login', function () {
+    return view('login');
+})->middleware('guest')->name('login');
 
 Route::get('/food', function () {
     return view('food');
@@ -299,4 +295,4 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
 
     return redirect('/login');
-})->name('logout');
+})->name('logout'); 

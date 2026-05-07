@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Food;
+use App\Models\Order;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -12,9 +13,12 @@ class AdminDashboardController extends Controller{
     public function dashboard(){
         $user = Auth::guard('web')->user();
         $twelveMonthsAgo = Carbon::now()->subMonths(12);
+        $totalOrders = Order::count();
+        $totalRevenue = Order::sum('total') ?? 0;
+        $totalUsers = User::count();
+        $totalFoods = Food::count();
 
-            $latestFoods = Food::latest()->take(5)->get();      
-            $totalFoods = Food::count(); 
+        $latestFoods = Food::latest()->take(5)->get();
 
         $recentLogins = AdminAccessLog::with('admin')
                             ->where('created_at', '>=', $twelveMonthsAgo)
@@ -26,10 +30,9 @@ class AdminDashboardController extends Controller{
                         ->groupBy('month')
                         ->get();
 
-    $users = User::latest()->take(10)->get(); // only 10 users for preview    
-        return view('admin.dashboard', compact('user', 'recentLogins', 'users', 'totalFoods', 'latestFoods', 'loginsByMonth'
-    ));   
-}
+        $users = User::latest()->take(10)->get(); // only 10 users for preview    
+        return view('admin.dashboard', compact('user', 'recentLogins', 'users', 'totalFoods', 'latestFoods', 'loginsByMonth', 'totalOrders', 'totalRevenue', 'totalUsers'));   
+    }
 
 
 public function generateId($id){

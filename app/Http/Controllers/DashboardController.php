@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
@@ -15,6 +15,7 @@ class DashboardController extends Controller{
 
         $totalOrders = Order::where('user_id', $user->id)->count();
 
+        $totalMeals = Food::count();
         $totalRevenue = Order::where('user_id', $user->id)->sum('total');
 
         $delivered = Order::where('user_id', $user->id)
@@ -48,7 +49,8 @@ class DashboardController extends Controller{
             'pending',
             'weeklyOrders',
             'produced',
-            'ordered'
+            'ordered',
+            'totalMeals'
         ));
     }
 }

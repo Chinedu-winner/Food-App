@@ -68,35 +68,36 @@
       </div>
     </div>
   </div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop&auto=format')">
-      <div class="bg-black bg-opacity-50 rounded-lg p-4">
-        <h3 class="text-3xl font-bold mb-2">{{ $totalOrders }}</h3>
-        <span class="text-lg opacity-90">📦 Total Orders</span>
-      </div>
+        <div class="bg-black bg-opacity-50 rounded-lg p-4">
+            <h3 class="text-3xl font-bold mb-2">{{ $totalOrders }}</h3>
+            <span class="text-lg opacity-90">📦 Total Orders</span>
+        </div>
     </div>
-    <div class="bg-red-400 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-green-200 bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=200&fit=crop&auto=format')">
-      <div class="bg-black bg-opacity-50 rounded-lg p-4">
-        <h3 class="text-3xl font-bold mb-2">${{ number_format($totalRevenue, 2) }}</h3>
-        <span class="text-lg opacity-90">💰 Total Revenue</span>
-    </div>
+
+    <div class="bg-green-500 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=200&fit=crop&auto=format')">
+        <div class="bg-black bg-opacity-50 rounded-lg p-4">
+            <h3 class="text-3xl font-bold mb-2">{{ $totalMeals }}</h3>
+            <span class="text-lg opacity-90">🍽️ Total Meals</span>
+        </div>
     </div>
     <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=200&fit=crop&auto=format')">
-    <div class="bg-black bg-opacity-50 rounded-lg p-4">
-        <h3 class="text-3xl font-bold mb-2">{{ $delivered }}</h3>
-        <span class="text-lg opacity-90">✅ Delivered</span>
+        <div class="bg-black bg-opacity-50 rounded-lg p-4">
+            <h3 class="text-3xl font-bold mb-2">{{ $delivered }}</h3>
+            <span class="text-lg opacity-90">✅ Delivered</span>
+        </div>
     </div>
+
+    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1556909114-4c36e03d6b3e?w=300&h=200&fit=crop&auto=format')">
+        <div class="bg-black bg-opacity-50 rounded-lg p-4">
+            <h3 class="text-3xl font-bold mb-2">{{ $pending }}</h3>
+            <span class="text-lg opacity-90">⏳ Pending</span>
+        </div>
     </div>
-    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-white bg-
-    cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1556909114-4c36e03d6b3e?w=300&h=200&fit=crop&auto=format')">
-    <div class="bg-black bg-opacity-50 rounded-lg p-4">
-        <h3 class="text-3xl font-bold mb-2">{{ $pending }}</h3>
-        <span class="text-lg opacity-90">⏳ Pending</span>
-    </div>
-    </div>
-</div>
+
+</div> 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
         <div class="flex items-center justify-center mb-4">

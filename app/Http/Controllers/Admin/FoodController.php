@@ -51,8 +51,8 @@ class FoodController extends Controller{
             'food_name' => $food->name,
         ]);
 
-        return redirect()->route('admin.foods.index')
-            ->with('success', 'Food created successfully.');
+        return redirect()->route('meal.index')
+            ->with('success', 'Food created successfully. Check the meal page to view it!');
     }
 
     public function edit($id){
